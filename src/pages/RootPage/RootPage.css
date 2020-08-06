@@ -3,11 +3,22 @@
     display: flex;
     align-content: center;
     width: 100%;
-    -webkit-box-shadow: 0 4px 5px -1px rgba(0,0,0,0.21);
-    -moz-box-shadow: 0 4px 5px -1px rgba(0,0,0,0.21);
-    box-shadow: 0 4px 5px -1px rgba(0,0,0,0.21);
+    -webkit-box-shadow: 0 4px 5px -1px rgba(0, 0, 0, 0.21);
+    -moz-box-shadow: 0 4px 5px -1px rgba(0, 0, 0, 0.21);
+    box-shadow: 0 4px 5px -1px rgba(0, 0, 0, 0.21);
     box-sizing: border-box;
     height: 60px;
+    position: relative;
+}
+
+.phone-icon-menu-container {
+    position: absolute;
+    width: 90% !important;
+    left: 50%;
+    top: 76px;
+    transform: translateX(-50%);
+    display: flex;
+    padding: 10px 30px;
 }
 
 .grid-of-users-container {
