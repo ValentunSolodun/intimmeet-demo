@@ -1,0 +1,22 @@
+.common-button-style {
+    padding: 5px 21px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /*margin: 0 5px;*/
+}
+
+.common-button-style:focus {
+    outline: none;
+}
+
+.gray-button {
+    background: #878787;
+}
+
+.green-button {
+    background: #63c2b9;
+}

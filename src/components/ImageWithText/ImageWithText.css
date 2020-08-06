@@ -1,0 +1,31 @@
+.image-with-text-container {
+    position: relative;
+}
+
+.image-with-text-title-containers {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+}
+
+.image-with-text-title,
+.image-with-text-subtitle {
+    color: #fff;
+    display: block;
+}
+
+.image-with-text-title {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.image-with-text-subtitle {
+    font-size: 12px;
+}
+
+.image-with-text-img {
+    max-width: 160px;
+    width: 100%;
+    max-height: 160px;
+    height: 160px;
+}
