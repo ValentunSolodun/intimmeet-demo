@@ -2,9 +2,9 @@ import React from 'react';
 import './Hint.css';
 import cn from 'classnames';
 
-const Hint = ({text, className, ...args}) => {
+const Hint = ({onClick, text, className, ...args}) => {
   return (
-    <div className={cn('hint-container', className)} {...args}>
+    <div onClick={onClick} className={cn('hint-container', className)} {...args}>
       <span className='hint-icon'>
         ?
       </span>
