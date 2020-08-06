@@ -1,0 +1,17 @@
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 6px;
+}
+
+.icon-element {
+    width: 35px;
+    height: 30px;
+}
+
+.icon-element-text {
+    font-size: 10px;
+    color: #4750ae;
+}

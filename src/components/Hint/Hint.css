@@ -1,0 +1,21 @@
+.hint-container {
+    display: flex;
+    align-items: center;
+}
+
+.hint-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #4750ae;
+    color: #4750ae;
+    font-weight: bold;
+}
+.hint-text {
+    font-size: 11px;
+    color: #4750ae;
+}
