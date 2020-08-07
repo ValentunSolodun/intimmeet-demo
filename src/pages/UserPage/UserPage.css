@@ -1,0 +1,50 @@
+.user-page-container {
+    padding: 0 20px;
+    height: 100vh;
+}
+
+.user-name-container {
+    font-size: 17px;
+    font-weight: bold;
+    padding: 20px 50px;
+    border-radius: 20px;
+    display: flex;
+    color: #666363;
+    align-items: center;
+    -webkit-box-shadow: 10px 10px 3px -6px rgba(190,209,191,1);
+    -moz-box-shadow: 10px 10px 3px -6px rgba(190,209,191,1);
+    box-shadow: 10px 10px 3px -6px rgba(190,209,191,1);
+}
+
+.user-bio-button-back-container {
+    padding: 0 35px;
+}
+
+.user-bio-button-back-container .button-back,
+.user-bio-button-back-container .button-back .common-button-style {
+    font-size: 12px;
+    color: #4750ae;
+}
+
+/*.user-avatar-container,*/
+/*.user-bio-button-back-container{*/
+/*    height: 50vh;*/
+/*}*/
+
+.user-bio-container {
+    box-sizing: border-box;
+    margin-top: 30px;
+}
+
+.user-bio-container__title {
+    font-size: 25px;
+    font-weight: bold;
+    color: #666363;
+}
+
+.user-bio-container__description {
+    font-size: 12px;
+    color: #666363;
+    line-height: 20px;
+    margin-bottom: 20px;
+}
