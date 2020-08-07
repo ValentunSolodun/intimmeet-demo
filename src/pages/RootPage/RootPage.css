@@ -42,3 +42,16 @@
     justify-content: space-between;
     margin-top: 5px;
 }
+
+.phone-icon-menu-container .phone-icon-menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 6px;
+}
+
+.button-hide-in-grid .common-button-style,
+.button-like-in-grid .common-button-style {
+    padding: 5px 21px;
+}

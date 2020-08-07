@@ -4,12 +4,13 @@ import PhoneIcon from '../../components/PhoneIcon';
 import Menu from '../../components/Menu/Menu';
 import Button from '../../components/Button';
 import ImageWithText from '../../components/ImageWithText';
-import Dropdown from '../../layouts/Dropdown';
+import Dropdown from '../../components/Dropdown';
 import Icon from '../../components/Icon';
 import Hint from '../../components/Hint';
 import _ from 'lodash';
 import cn from 'classnames';
 import {useOnClickOutside} from '../../helpers/hooks';
+import {customHistory} from '../../helpers/history';
 
 const USER_TEST_DATA = [
   {id: 1, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
@@ -32,7 +33,7 @@ const RootPage = () => {
   const refDropdown = useRef(null);
 
   const [showPhoneIconMenu, setShowPhoneIconMenu] = useState(false);
-  useOnClickOutside(refDropdown, () => setShowPhoneIconMenu(false));
+  useOnClickOutside(refDropdown, () => setShowPhoneIconMenu(false), ['phone-icon-img-item']);
 
   // const [selectedUser, setSelectedUser] = useState(_.first(USER_TEST_DATA).id);
   //
@@ -40,27 +41,27 @@ const RootPage = () => {
   //
   // }
 
-  const handlerOnClickUser = () => {
-
-  }
+  const handlerOnClickUser = (userId) => {
+    customHistory.push(`/user/${userId}`);
+  };
 
   const handlerOnClickPhoneIcon = () => {
     setShowPhoneIconMenu(!showPhoneIconMenu)
-  }
+  };
 
   return (
     <div>
       <div className='top-panel'>
-        <PhoneIcon onClick={handlerOnClickPhoneIcon} />
+        <PhoneIcon classNameImg='phone-icon-img-item' onClick={handlerOnClickPhoneIcon}/>
         {
           showPhoneIconMenu ? (
             <Dropdown ref={refDropdown} className='phone-icon-menu-container'>
-              <Icon text='Call Approvals' imgSrc='images/UserApprovals.png'/>
-              <Icon text='Call Log' imgSrc='images/UserApprovals.png'/>
-              <Icon text='Call Purchase' imgSrc='images/UserApprovals.png'/>
-              <Icon text='Call Availability' imgSrc='images/UserApprovals.png'/>
+              <Icon className='phone-icon-menu-item' text='Call Approvals' imgSrc='images/UserApprovals.png'/>
+              <Icon className='phone-icon-menu-item' text='Call Log' imgSrc='images/UserApprovals.png'/>
+              <Icon className='phone-icon-menu-item' text='Call Purchase' imgSrc='images/UserApprovals.png'/>
+              <Icon className='phone-icon-menu-item' text='Call Availability' imgSrc='images/UserApprovals.png'/>
               <div style={{position: 'relative'}}>
-                <Hint style={{position: 'absolute', top: 10, right: -15}} text='Help' />
+                <Hint style={{position: 'absolute', top: 10, right: -15}} text='Help'/>
               </div>
             </Dropdown>) : null
         }
@@ -71,10 +72,10 @@ const RootPage = () => {
           _.map(USER_TEST_DATA, u => {
             return (
               <div className={cn('user-item-container')} key={u.id}>
-                <ImageWithText onClick={handlerOnClickUser} imgSrc={u.imgSrc} title={u.name} subtitle={u.location}/>
+                <ImageWithText onClick={() => handlerOnClickUser(u.id)} imgSrc={u.imgSrc} title={u.name} subtitle={u.location}/>
                 <div className='user-item-button-container'>
-                  <Button label='Hide' style='gray'/>
-                  <Button label='Like' style='green'/>
+                  <Button className='button-hide-in-grid' label='Hide' style='gray'/>
+                  <Button className='button-like-in-grid' label='Like' style='green'/>
                 </div>
               </div>
             )
