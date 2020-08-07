@@ -1,12 +1,16 @@
 .common-button-style {
-    padding: 5px 21px;
-    color: #fff;
     font-size: 17px;
     font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    background: #fff;
+    color: #fff;
     /*margin: 0 5px;*/
+}
+
+.button-container {
+    display: flex;
 }
 
 .common-button-style:focus {
@@ -15,6 +19,7 @@
 
 .gray-button {
     background: #878787;
+
 }
 
 .green-button {
