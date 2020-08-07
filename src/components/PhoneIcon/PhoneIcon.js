@@ -1,10 +1,10 @@
 import React from 'react';
 import './PhoneIcon.css';
 
-const PhoneIcon = ({...args}) => {
+const PhoneIcon = ({classNameImg, ...args}) => {
   return (
     <div {...args}>
-      <img src="images/phone.png" alt="Call"/>
+      <img className={classNameImg} src="images/phone.png" alt="Call"/>
     </div>
   )
 }
