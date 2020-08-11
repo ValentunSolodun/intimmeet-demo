@@ -1,9 +1,11 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import './RootPage.css';
+import {connect} from 'react-redux';
 import PhoneIcon from '../../components/PhoneIcon';
 import Menu from '../../components/Menu/Menu';
 import Button from '../../components/Button';
 import ImageWithText from '../../components/ImageWithText';
+import {GET_USERS_REQUEST} from '../../actions';
 import Dropdown from '../../components/Dropdown';
 import Icon from '../../components/Icon';
 import Hint from '../../components/Hint';
@@ -28,12 +30,16 @@ const USER_TEST_DATA = [
   {id: 13, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
 ];
 
-const RootPage = () => {
+const RootPage = ({users, getUsers}) => {
 
   const refDropdown = useRef(null);
 
   const [showPhoneIconMenu, setShowPhoneIconMenu] = useState(false);
   useOnClickOutside(refDropdown, () => setShowPhoneIconMenu(false), ['phone-icon-img-item']);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   // const [selectedUser, setSelectedUser] = useState(_.first(USER_TEST_DATA).id);
   //
@@ -69,10 +75,11 @@ const RootPage = () => {
       </div>
       <div className='grid-of-users-container'>
         {
-          _.map(USER_TEST_DATA, u => {
+          _.map(users, u => {
             return (
               <div className={cn('user-item-container')} key={u.id}>
-                <ImageWithText onClick={() => handlerOnClickUser(u.id)} imgSrc={u.imgSrc} title={u.name} subtitle={u.location}/>
+                <ImageWithText onClick={() => handlerOnClickUser(u.id)} imgSrc={u.imgSrc} title={u.name}
+                               subtitle={u.location}/>
                 <div className='user-item-button-container'>
                   <Button className='button-hide-in-grid' label='Hide' style='gray'/>
                   <Button className='button-like-in-grid' label='Like' style='green'/>
@@ -86,4 +93,11 @@ const RootPage = () => {
   )
 }
 
-export default RootPage;
+export default connect(
+  state => ({
+    users: state.users
+  }),
+  dispatch => ({
+    getUsers: () => dispatch({type: GET_USERS_REQUEST})
+  })
+)(RootPage);
