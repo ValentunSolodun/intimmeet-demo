@@ -1,6 +1,8 @@
 import React from 'react';
-import RootPage from './pages/RootPage'
+import RootPage from './pages/RootPage';
 import UserPage from './pages/UserPage';
+import {Provider} from 'react-redux';
+import store from './store';
 import './App.css';
 import {
   Router,
@@ -12,20 +14,16 @@ import {customHistory} from './helpers/history';
 
 function App() {
   return (
-    <div className="App">
+    <Provider store={store}>
       <Router history={customHistory}>
         <div>
           <Switch>
-            <Route exact path="/">
-              <RootPage/>
-            </Route>
-            <Route path="/user/:id">
-              <UserPage/>
-            </Route>
+            <Route exact path="/" component={RootPage}/>
+            <Route path="/user/:id" component={UserPage}/>
           </Switch>
         </div>
       </Router>
-    </div>
+    </Provider>
   );
 }
 
