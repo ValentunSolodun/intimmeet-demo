@@ -1,6 +1,7 @@
 import React from 'react';
 import RootPage from './pages/RootPage';
 import UserPage from './pages/UserPage';
+import LoginPage from './pages/LoginPage';
 import {Provider} from 'react-redux';
 import store from './store';
 import './App.css';
@@ -19,6 +20,7 @@ function App() {
         <div>
           <Switch>
             <Route exact path="/" component={RootPage}/>
+            <Route path="/login" component={LoginPage}/>
             <Route path="/user/:id" component={UserPage}/>
           </Switch>
         </div>
