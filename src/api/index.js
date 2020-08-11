@@ -11,6 +11,6 @@ export const getUsers = async () => {
   return await axios.get(`${host}/api/users`);
 };
 
-export const getUser = async ({userId}) => {
+export const getUser = async (userId) => {
   return await axios.get(`${host}/api/users/${userId}`);
 };
