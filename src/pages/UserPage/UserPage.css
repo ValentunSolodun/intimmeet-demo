@@ -6,14 +6,14 @@
 .user-name-container {
     font-size: 17px;
     font-weight: bold;
-    padding: 20px 50px;
+    padding: 20px 35px;
     border-radius: 20px;
     display: flex;
     color: #666363;
     align-items: center;
-    -webkit-box-shadow: 10px 10px 3px -6px rgba(190,209,191,1);
-    -moz-box-shadow: 10px 10px 3px -6px rgba(190,209,191,1);
-    box-shadow: 10px 10px 3px -6px rgba(190,209,191,1);
+    -webkit-box-shadow: 10px 10px 3px -6px rgba(190, 209, 191, 1);
+    -moz-box-shadow: 10px 10px 3px -6px rgba(190, 209, 191, 1);
+    box-shadow: 10px 10px 3px -6px rgba(190, 209, 191, 1);
 }
 
 .user-bio-button-back-container {
@@ -47,4 +47,45 @@
     color: #666363;
     line-height: 20px;
     margin-bottom: 20px;
+}
+
+.user-avatar-container {
+    position: relative;
+}
+
+.user-name-container {
+    position: absolute;
+    background: #fff;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.user-page-avatar-container img.user-avatar-item {
+    width: 100%;
+    max-height: 500px;
+}
+
+.user-icon-add-to-favourite,
+.user-icon-go-call {
+    position: absolute;
+    bottom: 90px;
+}
+
+.user-icon-add-to-favourite {
+    left: 35px;
+}
+
+.user-icon-go-call {
+    right: 35px;
+}
+
+.user-icon-go-call-dropdown {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    /*transform: translateY(50%);*/
+    top: inherit;
+    width: 100% !important;
 }
