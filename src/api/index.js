@@ -1,16 +1,15 @@
 import axios from 'axios';
+import {axiosG} from '../config/axios';
+import {host} from '../config/axios';
 
-let host = 'http://localhost:3001';
-
-if (process.env.NODE_ENV === 'production') {
-  host = '';
-}
-
+export const login = async (login, password) => {
+  return await axios.post(`${host}/api/login`, {login, password});
+};
 
 export const getUsers = async () => {
-  return await axios.get(`${host}/api/users`);
+  return await axiosG.get(`api/users`);
 };
 
 export const getUser = async (userId) => {
-  return await axios.get(`${host}/api/users/${userId}`);
+  return await axiosG.get(`api/users/${userId}`);
 };
