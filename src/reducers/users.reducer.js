@@ -12,7 +12,7 @@ const users = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        data: [action.payload]
+        data: [...action.payload.data]
       }
     }
     case GET_USERS_FAILED: {
