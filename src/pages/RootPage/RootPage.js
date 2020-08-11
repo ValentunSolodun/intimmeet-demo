@@ -16,6 +16,15 @@ import cn from 'classnames';
 import {useOnClickOutside} from '../../helpers/hooks';
 import {customHistory} from '../../helpers/history';
 
+const MENU_ITEM = [
+  {id: 1, name: 'Approvals', icon: 'images/icons/approvals.svg'},
+  {id: 1, name: 'Call Log', icon: 'images/icons/call_logs.svg'},
+  {id: 1, name: 'Speed Date', icon: 'images/icons/speed_date.svg'},
+  {id: 1, name: 'Images', icon: 'images/icons/images.svg'},
+  {id: 1, name: 'Credit Manager', icon: 'images/icons/credit_manager.svg'},
+  {id: 1, name: 'Settings', icon: 'images/icons/settings.svg'},
+]
+
 // const USER_TEST_DATA = [
 //   {id: 1, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
 //   {id: 2, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
@@ -38,7 +47,8 @@ const RootPage = ({renderData, getUsers}) => {
   const {users, isLoading, errors} = renderData;
 
   const [showPhoneIconMenu, setShowPhoneIconMenu] = useState(false);
-  useOnClickOutside(refDropdown, () => setShowPhoneIconMenu(false), ['phone-icon-img-item']);
+  const [selectedMenuItem, setSelectedMenuItem] = useState('');
+  useOnClickOutside(refDropdown, () => setShowPhoneIconMenu(false), ['phone-icon-general-img-item']);
 
   useEffect(() => {
     getUsers();
@@ -55,27 +65,61 @@ const RootPage = ({renderData, getUsers}) => {
   };
 
   const handlerOnClickPhoneIcon = () => {
-    setShowPhoneIconMenu(!showPhoneIconMenu)
+    setSelectedMenuItem('');
+    setShowPhoneIconMenu(!showPhoneIconMenu);
+  };
+
+  const handlerOnClickMenu = (key) => {
+    setSelectedMenuItem(key);
   };
 
   return (
-    <div>
-      <div className='top-panel'>
-        <PhoneIcon classNameImg='phone-icon-img-item' onClick={handlerOnClickPhoneIcon}/>
-        {
-          showPhoneIconMenu ? (
-            <Dropdown ref={refDropdown} className='phone-icon-menu-container'>
-              <Icon className='phone-icon-menu-item' text='Call Approvals' imgSrc='images/UserApprovals.png'/>
-              <Icon className='phone-icon-menu-item' text='Call Log' imgSrc='images/UserApprovals.png'/>
-              <Icon className='phone-icon-menu-item' text='Call Purchase' imgSrc='images/UserApprovals.png'/>
-              <Icon className='phone-icon-menu-item' text='Call Availability' imgSrc='images/UserApprovals.png'/>
-              <div style={{position: 'relative'}}>
-                <Hint style={{position: 'absolute', top: 10, right: -15}} text='Help'/>
+    <div className='root-page-container'>
+      <Icon onClick={handlerOnClickPhoneIcon} className='phone-icon-general' classNameImg='phone-icon-general-img-item'
+            imgSrc='images/icons/phone_icon.svg'/>
+      {
+        showPhoneIconMenu ? (
+          <Dropdown ref={refDropdown} className='phone-icon-menu-container'>
+            <div className='logo-hint-container'>
+              <img src="images/icons/logo.svg" alt="Logo"/>
+              <div>
+                <Icon className='logo-hint-container__hint-icon'
+                      text='Help'
+                      classNameImg='logo-hint-container__hint-icon-item-img'
+                      imgSrc='images/icons/help_icon.svg'
+                />
               </div>
-            </Dropdown>) : null
-        }
-        <Menu/>
-      </div>
+            </div>
+            <div className='phone-icon-menu-container__menu'>
+              {
+                _.map(MENU_ITEM, m => {
+                  return (
+                    <Icon style={{opacity: selectedMenuItem === m.name ? 1 : 0.7}}
+                          onClick={() => handlerOnClickMenu(m.name)} className='phone-icon-menu-item' text={m.name}
+                          imgSrc={m.icon}/>
+                  )
+                })
+              }
+            </div>
+            <div>
+              {
+                selectedMenuItem === 'Approvals' ? (
+                  <div>APPROVALS</div>
+                ) : selectedMenuItem === 'Call Log' ? (
+                  <div>CALL LOG</div>
+                ) : selectedMenuItem === 'Speed Date' ? (
+                  <div>SPEED DATE</div>
+                ) : selectedMenuItem === 'Images' ? (
+                  <div>IMAGES</div>
+                ) : selectedMenuItem === 'Credit Manager' ? (
+                  <div>CREDIT MANAGER</div>
+                ) : selectedMenuItem === 'Settings' ? (
+                  <div>SETTINGS</div>
+                ) : null
+              }
+            </div>
+          </Dropdown>) : null
+      }
       <div className='grid-of-users-container'>
         {
           isLoading ? <Loading/> : null

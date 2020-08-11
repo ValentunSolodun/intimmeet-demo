@@ -1,3 +1,17 @@
+.root-page-container {
+    position: relative;
+}
+
+.phone-icon-general {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    top: 0;
+}
+
+.phone-icon-general img {
+    height: 80px;
+}
 .top-panel {
     padding: 5px;
     display: flex;
@@ -18,6 +32,7 @@
     top: 76px;
     transform: translateX(-50%);
     display: flex;
+    flex-direction: column;
     padding: 10px 30px;
 }
 
@@ -29,12 +44,13 @@
     width: 100%;
     box-sizing: border-box;
     overflow-y: scroll;
-    height: calc(100vh - 60px);
+    max-height: 100vh;
 }
 
 .user-item-container {
     padding: 10px;
     border-radius: 10px;
+    width: 44%;
 }
 
 .user-item-button-container {
@@ -44,14 +60,40 @@
 }
 
 .phone-icon-menu-container .phone-icon-menu-item {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 15px 6px;
+    margin: 15px 6px 0 6px;
+}
+
+.phone-icon-menu-container .phone-icon-menu-item .icon-element-text {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.phone-icon-menu-container .logo-hint-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .button-hide-in-grid .common-button-style,
 .button-like-in-grid .common-button-style {
     padding: 5px 21px;
+}
+
+.logo-hint-container__hint-icon-item-img {
+    margin-right: 5px;
+}
+
+.logo-hint-container__hint-icon {
+    display: flex;
+    margin-right: 15px;
+}
+
+.phone-icon-menu-container__menu {
+    display: flex;
+    justify-content: space-between;
 }
