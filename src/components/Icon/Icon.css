@@ -7,11 +7,13 @@
 }
 
 .icon-element {
+    cursor: pointer;
+    display: block;
     /*width: 35px;*/
     /*height: 30px;*/
 }
 
 .icon-element-text {
-    font-size: 10px;
+    font-size: 7px;
     color: #4750ae;
 }
