@@ -5,6 +5,8 @@ import PhoneIcon from '../../components/PhoneIcon';
 import Menu from '../../components/Menu/Menu';
 import Button from '../../components/Button';
 import ImageWithText from '../../components/ImageWithText';
+import Loading from '../../components/Loading';
+import {getUsersSelector} from '../../selectors';
 import {GET_USERS_REQUEST} from '../../actions';
 import Dropdown from '../../components/Dropdown';
 import Icon from '../../components/Icon';
@@ -14,25 +16,26 @@ import cn from 'classnames';
 import {useOnClickOutside} from '../../helpers/hooks';
 import {customHistory} from '../../helpers/history';
 
-const USER_TEST_DATA = [
-  {id: 1, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 2, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 3, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 4, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 5, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 6, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 7, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 8, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 9, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 10, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 11, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 12, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-  {id: 13, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
-];
+// const USER_TEST_DATA = [
+//   {id: 1, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 2, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 3, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 4, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 5, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 6, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 7, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 8, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 9, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 10, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 11, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 12, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+//   {id: 13, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+// ];
 
-const RootPage = ({users, getUsers}) => {
+const RootPage = ({renderData, getUsers}) => {
 
   const refDropdown = useRef(null);
+  const {users, isLoading, errors} = renderData;
 
   const [showPhoneIconMenu, setShowPhoneIconMenu] = useState(false);
   useOnClickOutside(refDropdown, () => setShowPhoneIconMenu(false), ['phone-icon-img-item']);
@@ -75,6 +78,9 @@ const RootPage = ({users, getUsers}) => {
       </div>
       <div className='grid-of-users-container'>
         {
+          isLoading ? <Loading/> : null
+        }
+        {
           _.map(users, u => {
             return (
               <div className={cn('user-item-container')} key={u.id}>
@@ -95,7 +101,7 @@ const RootPage = ({users, getUsers}) => {
 
 export default connect(
   state => ({
-    users: state.users
+    renderData: getUsersSelector(state)
   }),
   dispatch => ({
     getUsers: () => dispatch({type: GET_USERS_REQUEST})
