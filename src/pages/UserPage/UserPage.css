@@ -3,6 +3,29 @@
     height: 100vh;
 }
 
+.user-page-container .phone-icon-general {
+    top: 26%;
+    right: 30px;
+    height: 60px;
+    width: 60px;
+}
+
+.user-page-container .phone-icon-menu-container {
+    top: 33%;
+}
+
+.user-page-container__dropdown-overlay .logo-hint-container {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.user-page-container__dropdown-overlay .dropdown-container {
+    border-radius: 45px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
 .user-name-container {
     font-size: 17px;
     font-weight: bold;
@@ -67,18 +90,17 @@
     max-height: 500px;
 }
 
-.user-icon-add-to-favourite,
-.user-icon-go-call {
-    position: absolute;
-    bottom: 90px;
-}
-
 .user-icon-add-to-favourite {
-    left: 35px;
+    top: 26%;
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    left: 30px;
+    z-index: 1;
 }
 
 .user-icon-go-call {
-    right: 35px;
+    right: 21px;
 }
 
 .user-icon-go-call-dropdown {
