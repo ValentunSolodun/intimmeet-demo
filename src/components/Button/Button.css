@@ -6,6 +6,7 @@
     cursor: pointer;
     background: #fff;
     color: #fff;
+    width: 100%;
     /*margin: 0 5px;*/
 }
 
@@ -27,5 +28,9 @@
 }
 
 .red-button {
-    background: #ff3266;
+    background: #E44156;
+    color: #fff;
+    border-radius: 13px;
+    font-size: 13px;
+    height: 31px;
 }
