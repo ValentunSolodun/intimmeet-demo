@@ -1,16 +1,67 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './IntemmeetButton.css';
 import Icon from '../Icon';
+import {initialize, callRequest, onCall, offCall} from 'fake';
 import Dropdown from '../Dropdown';
 import cn from 'classnames';
 import _ from 'lodash';
 import Button from '../Button';
 
+const ControlButtonItem = ({handlerOnClick, imgSrc}) => {
+  return (
+    <Icon className='common-control-button-style' onClick={handlerOnClick} imgSrc={imgSrc}/>
+  )
+};
+
+const ControlButton = ({
+                         isIncoming,
+                         callbackOnClickOffVolume,
+                         callbackOnClickMute,
+                         callbackOnClickVideo,
+                         callbackOnClickEndCall,
+                         callbackOnClickPickUp,
+                         callbackOnClickHungUp,
+                       }) => {
+  return (
+    <>
+      {
+        isIncoming ? (
+          <>
+            <Icon onClick={callbackOnClickHungUp} imgSrc='/images/icons/hung_up.svg'/>
+            <Icon onClick={callbackOnClickPickUp} imgSrc='/images/icons/pick_up.svg'/>
+          </>
+        ) : (
+          <>
+            <Icon onClick={callbackOnClickOffVolume} imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
+            <Icon onClick={callbackOnClickMute} imgSrc='/images/icons/ongoing_call__mute.svg'/>
+            <Icon onClick={callbackOnClickVideo} imgSrc='/images/icons/ongoing_call__video.svg'/>
+            <Icon onClick={callbackOnClickEndCall} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+          </>
+        )
+      }
+
+    </>
+  )
+};
+
+const IncomingCall = ({fullName}) => {
+  return (
+    <>
+      <div className='calling-container__full-name-of-client'>
+        {fullName}
+      </div>
+      <div className='calling-container__control-button'>
+        <ControlButton isIncoming={true}/>
+      </div>
+    </>
+  )
+};
+
 const ConnectingClient = ({name, fullName}) => {
   return (
     <>
       <div className='calling-container__connection-top-icons'>
-        <div />
+        <div/>
         <div>
           <Icon imgSrc='/images/icons/gray_dont_enter.svg'/>
           <Icon imgSrc='/images/icons/gray_alert.svg'/>
@@ -23,10 +74,7 @@ const ConnectingClient = ({name, fullName}) => {
         </span>
       </div>
       <div className='calling-container__control-button'>
-        <Icon imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
-        <Icon imgSrc='/images/icons/ongoing_call__mute.svg'/>
-        <Icon imgSrc='/images/icons/ongoing_call__video.svg'/>
-        <Icon imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+        <ControlButton/>
       </div>
       <div className='calling-container__full-name-of-client'>
         {fullName}
@@ -51,10 +99,7 @@ const ConnectedClient = ({name, fullName, timeCalling}) => {
         </span>
       </div>
       <div className='calling-container__control-button'>
-        <Icon imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
-        <Icon imgSrc='/images/icons/ongoing_call__mute.svg'/>
-        <Icon imgSrc='/images/icons/ongoing_call__video.svg'/>
-        <Icon imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+        <ControlButton/>
       </div>
     </>
   )
@@ -112,21 +157,97 @@ const EndedCall = ({fullName, name, timeCalling, reliability = 56, interest = 80
   )
 };
 
-const CallingComponent = ({name, fullName, connecting, connected, timeCalling = '1:03', callEnded}) => {
+const ConnectingVideoClient = ({name, fullName, imgSrcBackground}) => {
+
+  const [typeOfVideoCall, setTypeOfVideoCall] = useState('');
+
+  return (
+    <>
+      <div className='calling-container__video-container'>
+        <div style={{backgroundImage: `url("${imgSrcBackground}")`}}
+             className='calling-container__background-placeholder'>
+          <div className='calling-container__video-overlay'/>
+          {
+            !typeOfVideoCall ? (
+              <>
+              <span>
+                Start a regular video call with {name} or <b>gamify</b> the video call to break the
+                ice and make it more fun.
+              </span>
+                <div>
+                  <Button
+                    onClick={() => setTypeOfVideoCall('regular')}
+                    leftIcon={<Icon imgSrc='/images/icons/video_white.svg'/>}
+                    style='red'
+                    label='Regular Video Call'
+                  />
+                  <Button
+                    leftIcon={<Icon imgSrc='/images/icons/gamify.svg'/>}
+                    style='red'
+                    label='Gamify the Call'
+                  />
+                </div>
+              </>
+            ) : typeOfVideoCall === 'regular' ? (
+              <div>
+                <span><b>Waiting for {name} to answer</b></span>
+                <div>
+                  <Icon style={{height: 44, width: 44, margin: '0px auto 11px auto'}} imgSrc='/images/icons/white_border_phone.svg'/>
+                  <span>
+                    <b>TIP:</b>
+                    <br/>
+                    Keep the call short.
+                    Save the lengthy talk
+                    for your first date!
+                  </span>
+                </div>
+              </div>
+            ) : null
+          }
+        </div>
+        <div>
+          <div>
+            {fullName}
+          </div>
+          <div>
+            <ControlButtonItem imgSrc='/images/icons/ongoing_call__mute.svg'/>
+            <ControlButtonItem imgSrc='/images/icons/ongoing_call__video.svg'/>
+            <ControlButtonItem imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+const CallingComponent = ({
+                            name,
+                            fullName,
+                            connecting,
+                            connected,
+                            connectingVideo,
+                            imgSrc,
+                            incomingCall,
+                            timeCalling = '1:03',
+                            callEnded
+                          }) => {
   return (
     <div className='calling-container'>
       {
-        connecting ? (<ConnectingClient fullName={fullName} name={name}/>) : null
+        connectingVideo ? (<ConnectingVideoClient imgSrcBackground={imgSrc} fullName={fullName} name={name}/>) : null
       }
-
-      {
-        connected ? (<ConnectedClient fullName={fullName} timeCalling={timeCalling}/>) : null
-      }
-
-      {
-        callEnded ? (<EndedCall fullName={fullName} timeCalling={timeCalling} name={name}/>) : null
-      }
-
+      {/*{*/}
+      {/*  incomingCall ? (<IncomingCall fullName={fullName}/>) : null*/}
+      {/*}*/}
+      {/*{*/}
+      {/*  connecting ? (<ConnectingClient fullName={fullName} name={name}/>) : null*/}
+      {/*}*/}
+      {/*{*/}
+      {/*  connected ? (<ConnectedClient fullName={fullName} timeCalling={timeCalling}/>) : null*/}
+      {/*}*/}
+      {/*{*/}
+      {/*  callEnded ? (<EndedCall fullName={fullName} timeCalling={timeCalling} name={name}/>) : null*/}
+      {/*}*/}
     </div>
   )
 };
@@ -158,7 +279,10 @@ class IntemmeetButton extends React.Component {
   state = {
     showMenu: false,
     selectedMenu: '',
-    calling: false,
+    calling: {
+      status: false,
+      video: false
+    },
   }
 
   props = {
@@ -197,15 +321,32 @@ class IntemmeetButton extends React.Component {
   //   super(props);
   // }
 
+  handlerOnCall = (e) => {
+    console.log(e);
+  };
+
+  componentDidMount() {
+    // this.setCallRequest = (userId) => callRequest(userId);
+    // onCall(this.handlerOnCall);
+  };
+
   handlerOnClickPhoneIcon = () => {
+    if (this.state.calling.status) return;
     this.setState({showMenu: !this.state.showMenu});
     this.setState({selectedMenu: ''});
   };
 
   handlerOnClickMenu = (key) => {
     if (key === 'Call') {
+      // this.setCallRequest(this.props.user.id);
       this.setState({showMenu: false});
-      this.setState({calling: true});
+      this.setState({calling: {status: true, video: false}});
+    }
+
+    if (key === 'Video Call') {
+      // this.setCallRequest(this.props.user.id);
+      this.setState({showMenu: false});
+      this.setState({calling: {status: true, video: true}});
     }
     this.setState({selectedMenu: key});
   };
@@ -230,9 +371,17 @@ class IntemmeetButton extends React.Component {
         />
 
         {
-          this.state.calling ? (
-            <CallingComponent connecting={false} connected={false} callEnded={true} name={this.props.user.name}
-                              fullName={this.props.user.name + ' !'}/>
+          this.state.calling.status ? (
+            <CallingComponent
+              connectingVideo={this.state.calling.video}
+              incomingCall={false}
+              connecting={true}
+              connected={false}
+              callEnded={false}
+              imgSrc={this.props.user.imgSrc}
+              name={this.props.user.name}
+              fullName={this.props.user.name + ' !'}
+            />
           ) : null
         }
 
