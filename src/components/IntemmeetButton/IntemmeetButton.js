@@ -192,7 +192,8 @@ const ConnectingVideoClient = ({name, fullName, imgSrcBackground}) => {
               <div>
                 <span><b>Waiting for {name} to answer</b></span>
                 <div>
-                  <Icon style={{height: 44, width: 44, margin: '0px auto 11px auto'}} imgSrc='/images/icons/white_border_phone.svg'/>
+                  <Icon style={{height: 44, width: 44, margin: '0px auto 11px auto'}}
+                        imgSrc='/images/icons/white_border_phone.svg'/>
                   <span>
                     <b>TIP:</b>
                     <br/>
@@ -232,7 +233,7 @@ const CallingComponent = ({
                             callEnded
                           }) => {
   return (
-    <div className='calling-container'>
+    <div style={{top: connectingVideo ? '10%' : '33%'}} className='calling-container'>
       {
         connectingVideo ? (<ConnectingVideoClient imgSrcBackground={imgSrc} fullName={fullName} name={name}/>) : null
       }
@@ -365,6 +366,7 @@ class IntemmeetButton extends React.Component {
             this.handlerOnClickPhoneIcon(e);
             this.props.callbackOnClickPhoneIcon();
           }}
+          style={{top: this.state.calling.video ? '1%' : '26%'}}
           className={cn(this.props.classNamePhoneIcon, 'phone-icon-general')}
           classNameImg='phone-icon-general-img-item'
           imgSrc='/images/icons/phone_icon.svg'
