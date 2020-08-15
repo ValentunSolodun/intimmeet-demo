@@ -89,6 +89,23 @@ app.use((req, res, next) => {
 
 //
 
+app.post('/customer/get_user_ids', async (req, res) => {
+  const {user_ids, target_ids} = req.body;
+  const exampleDate = {
+    "user_ids": [
+      "4lnjZOmhL8rVXDfMD1vjYFzX4KwJI4R5nYYTyX8zexFKo",
+      "VN0jaw3IeLYJ4vTxg4b3rCXAoMdwCrVyb33hoxQrQYskw",
+      "aDV01QNTbwR4MQIvYZW9Bf0rvWGZho5VDnntQ5mwmyFg6"
+    ],
+    "target_ids": [
+      "oNpKaQBIe0bpKribM4N8DS4KZLA1uRQ0GWWcrlyZzqCDr",
+      "zyBwNzZSQwBbyLu3O0bK9tvrb9plCwvykAAfOxaozdc6B",
+      "mgoAYxVfNA45prCBY8eG5UW6OjbnTyAGB99uGwW3KkhV1"
+    ]
+  };
+
+  res.send(exampleDate)
+});
 
 //User Data
 
