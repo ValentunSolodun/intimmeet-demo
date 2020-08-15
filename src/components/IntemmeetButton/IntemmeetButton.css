@@ -42,18 +42,25 @@
     margin-bottom: 5px;
 }
 
-.calling-container > div.calling-container__connection-top-icons {
+.calling-container__connection-top-icons {
     display: flex;
     justify-content: space-between;
     font-size: 10px;
     color: #707070;
 }
 
-.calling-container > div.calling-container__connection-top-icons > div:nth-child(2) {
+.calling-container__connection-top-icons.top-icons-into-video-call {
+    padding: 10px 10px;
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.calling-container__connection-top-icons > div:nth-child(2) {
     display: flex;
 }
 
-.calling-container > div.calling-container__connection-top-icons .icon-container {
+.calling-container__connection-top-icons .icon-container {
     margin: 0 5px;
 }
 
@@ -102,12 +109,19 @@
     margin: 0 auto;
 }
 
-.calling-container div.calling-container__tip {
+.calling-container__tip {
     background: #484848;
     padding: 4px 24px;
     color: #fff;
     border-radius: 12px;
     font-size: 10px;
+}
+
+.calling-container__tip.tip-into-video-call {
+    position: absolute;
+    bottom: 0;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 
@@ -219,5 +233,74 @@
 
 .calling-container__background-placeholder div .button-container {
     margin-bottom: 14px;
+}
+
+.calling-container__passion-detector-text {
+    color: #511673;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+}
+
+.calling-container__video-control-button_container {
+    margin-top: 11px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.calling-container__video-control-button_container > div:nth-child(1) {
+    font-size: 10px;
+    text-align: left;
+    color: #707070;
+}
+
+.calling-container__video-control-button_container > div:nth-child(2) {
+    display: flex;
+}
+
+.calling-container__video-element {
+    position: relative;
+    height: 218px;
+    width: 100%;
+    background: #000;
+    border-radius: 12px;
+}
+
+
+/*ProgressBarr*/
+
+.progress-bar-container {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.progress-bar-container__item-line,
+.progress-bar-container__item-progress,
+.progress-bar-container__progress-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.progress-bar-container__item-line {
+    height: 2px;
+    background: #BCBCBC;
+    width: 100%;
+}
+
+.progress-bar-container__item-progress {
+    height: 2px;
+    width: 50%;
+    background: #FF3266;
+}
+
+.progress-bar-container__progress-indicator {
+    height: 7px;
+    width: 2px;
+    transform: translateY(-40%);
+    background: #4750AE;
 }
 
