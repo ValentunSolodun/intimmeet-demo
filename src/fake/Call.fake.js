@@ -31,7 +31,7 @@ export default class Call extends EventTarget {
     if (event === 'pick_up') {
       setTimeout(() => {
         console.log(currentCall.id, 'Emit pick_up');
-        currentCall._emit('pick_up')
+        currentCall._emit('pick_up', data)
       }, 100)
     }
     if (event === 'state_changed') {
