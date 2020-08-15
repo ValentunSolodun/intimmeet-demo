@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import './RootPage.css';
 import {connect} from 'react-redux';
+import {initialize, callRequest, onCall, offCall} from '../../fake';
 import PhoneIcon from '../../components/PhoneIcon';
 import Menu from '../../components/Menu/Menu';
 import Button from '../../components/Button';
@@ -42,10 +43,11 @@ const MENU_ITEM = [
 //   {id: 13, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
 // ];
 
+initialize(localStorage.getItem('userId') || 1);
+
 const RootPage = ({renderData, getUsers}) => {
 
   const {users, isLoading, errors} = renderData;
-
   useEffect(() => {
     getUsers();
   }, []);
@@ -57,7 +59,7 @@ const RootPage = ({renderData, getUsers}) => {
 
   return (
     <div className='root-page-container'>
-      <IntemmeetButton />
+      <IntemmeetButton offsetTop='0%' />
 
       <div className='grid-of-users-container'>
         {
@@ -77,6 +79,15 @@ const RootPage = ({renderData, getUsers}) => {
             )
           })
         }
+      </div>
+      <div style={{position: 'absolute', bottom: 5, left: 10}}>
+        <button onClick={() => window.onCallEvent('create', {isIncomming: false, isOutcomming: true, targetName: 'test'})}>Outcomming call</button>
+        <button onClick={() => window.onCallEvent('create', {isIncomming: true, isOutcomming: false, targetName: 'test'})}>Incomming call</button>
+        <button onClick={() => window.onCallEvent('pick_up')}>Pick up</button>
+        <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
+        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)</button>
+        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: false})}>State changed (off video)</button>
+        <button onClick={() => window.onCallEvent('error')}>Error</button>
       </div>
     </div>
   )
