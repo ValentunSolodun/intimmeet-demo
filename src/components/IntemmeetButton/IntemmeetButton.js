@@ -34,57 +34,62 @@ const CollingContainer = ({children, offsetTop = '33%', style, ...args}) => {
   )
 };
 
-const ControlButtonItem = ({handlerOnClick, imgSrc}) => {
-  return (
-    <Icon className='common-control-button-style' onClick={handlerOnClick} imgSrc={imgSrc}/>
-  )
-};
+// const ControlButtonItem = ({handlerOnClick, imgSrc}) => {
+//   return (
+//     <Icon className='common-control-button-style' onClick={handlerOnClick} imgSrc={imgSrc}/>
+//   )
+// };
 
 const ControlButton = ({
+                         isVideo,
                          isIncoming,
-                         callbackOnClickOffVolume,
-                         callbackOnClickMute,
-                         callbackOnClickVideo,
-                         callbackOnClickEndCall,
-                         callbackOnClickPickUp,
-                         callbackOnClickHungUp,
+                         handlersOfCall = {},
                        }) => {
   return (
     <>
       {
         isIncoming ? (
           <>
-            <Icon onClick={callbackOnClickHungUp} imgSrc='/images/icons/hung_up.svg'/>
-            <Icon onClick={callbackOnClickPickUp} imgSrc='/images/icons/pick_up.svg'/>
+            <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/hung_up.svg'/>
+            <Icon onClick={() => handlersOfCall.handlerPickUp({publishVideo: false})}
+                  imgSrc='/images/icons/pick_up.svg'/>
+            <Icon onClick={() => handlersOfCall.handlerPickUp({publishVideo: true})}
+                  imgSrc='/images/icons/ongoing_call__video.svg'/>
           </>
-        ) : (
-          <>
-            <Icon onClick={callbackOnClickOffVolume} imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
-            <Icon onClick={callbackOnClickMute} imgSrc='/images/icons/ongoing_call__mute.svg'/>
-            <Icon onClick={callbackOnClickVideo} imgSrc='/images/icons/ongoing_call__video.svg'/>
-            <Icon onClick={callbackOnClickEndCall} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
-          </>
-        )
+        ) : isVideo ?
+          (
+            <>
+              <Icon onClick={handlersOfCall.handlerSetMic} imgSrc='/images/icons/ongoing_call__mute.svg'/>
+              <Icon onClick={handlersOfCall.handlerSetVideo} imgSrc='/images/icons/ongoing_call__video.svg'/>
+              <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+            </>
+          ) :
+          (<>
+            <Icon onClick={handlersOfCall.handlerSetVolume} imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
+            <Icon onClick={handlersOfCall.handlerSetMic} imgSrc='/images/icons/ongoing_call__mute.svg'/>
+            <Icon onClick={handlersOfCall.handlerSetVideo} imgSrc='/images/icons/ongoing_call__video.svg'/>
+            <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+          </>)
       }
 
     </>
   )
 };
 
-const IncomingCall = ({fullName}) => {
+const IncomingCall = ({fullName, handlersOfCall}) => {
   return (
     <CollingContainer>
       <div className='calling-container__full-name-of-client'>
         {fullName}
       </div>
       <div className='calling-container__control-button'>
-        <ControlButton isIncoming={true}/>
+        <ControlButton handlersOfCall={handlersOfCall} isIncoming={true}/>
       </div>
     </CollingContainer>
   )
 };
 
-const ConnectingClient = ({name, fullName}) => {
+const ConnectingClient = ({name, fullName, handlersOfCall}) => {
   return (
     <CollingContainer>
       <div className='calling-container__connection-top-icons'>
@@ -101,7 +106,7 @@ const ConnectingClient = ({name, fullName}) => {
         </span>
       </div>
       <div className='calling-container__control-button'>
-        <ControlButton/>
+        <ControlButton handlersOfCall={handlersOfCall}/>
       </div>
       <div className='calling-container__full-name-of-client'>
         {fullName}
@@ -110,7 +115,7 @@ const ConnectingClient = ({name, fullName}) => {
   )
 };
 
-const ConnectedClient = ({name, fullName, timeOfCall}) => {
+const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall}) => {
   return (
     <CollingContainer>
       <div className='calling-container__time-of-call'>
@@ -126,7 +131,7 @@ const ConnectedClient = ({name, fullName, timeOfCall}) => {
         </span>
       </div>
       <div className='calling-container__control-button'>
-        <ControlButton/>
+        <ControlButton handlersOfCall={handlersOfCall}/>
       </div>
     </CollingContainer>
   )
@@ -184,7 +189,7 @@ const EndedCall = ({fullName, handlerOnClickProfile, name, timeOfCall, reliabili
   )
 };
 
-const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground}) => {
+const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, handlersOfCall}) => {
 
   const [typeOfVideoCall, setTypeOfVideoCall] = useState(connecting ? 'regular' : '');
 
@@ -238,9 +243,7 @@ const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground}) =
             {fullName}
           </div>
           <div>
-            <ControlButtonItem imgSrc='/images/icons/ongoing_call__mute.svg'/>
-            <ControlButtonItem imgSrc='/images/icons/ongoing_call__video.svg'/>
-            <ControlButtonItem imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+            <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
           </div>
         </div>
       </div>
@@ -264,7 +267,7 @@ const ProgressBarr = ({progress, ...args}) => {
 };
 
 //TODO: Need to implement video element
-const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcBackground}) => {
+const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall}) => {
   return (
     <CollingContainer offsetTop='10%' style={{paddingTop: 50}}>
       <div className='calling-container__video-container'>
@@ -293,9 +296,7 @@ const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcB
             <b>{fullName}</b>
           </div>
           <div>
-            <ControlButtonItem imgSrc='/images/icons/ongoing_call__mute.svg'/>
-            <ControlButtonItem imgSrc='/images/icons/ongoing_call__video.svg'/>
-            <ControlButtonItem imgSrc='/images/icons/ongoing_call_end_call.svg'/>
+            <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
           </div>
         </div>
       </div>
@@ -304,6 +305,11 @@ const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcB
 };
 
 const CallingComponent = ({
+                            handlerPickUp,
+                            handlerHangUp,
+                            handlerSetVolume,
+                            handlerSetMic,
+                            handlerSetVideo,
                             name,
                             handlerOnClickProfile,
                             fullName,
@@ -316,26 +322,39 @@ const CallingComponent = ({
                             callEnded
                           }) => {
 
+  const handlersOfCall = {
+    handlerPickUp,
+    handlerHangUp,
+    handlerSetVolume,
+    handlerSetMic,
+    handlerSetVideo,
+  };
+
+
   const renderWithoutVideo = () => {
-    if (connecting) return <ConnectingClient fullName={fullName} name={name}/>
-    if (connected) return <ConnectedClient fullName={fullName} timeOfCall={timeOfCall}/>
+    if (connecting) return <ConnectingClient handlersOfCall={handlersOfCall} fullName={fullName} name={name}/>
+    if (connected) return <ConnectedClient handlersOfCall={handlersOfCall} fullName={fullName} timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
                                      timeOfCall={timeOfCall} name={name}/>
     return null;
   };
 
   const renderWithVideo = () => {
-    if (connecting) return <ConnectingVideoClient connecting={connecting} imgSrcBackground={imgSrc} fullName={fullName}
+    if (connecting) return <ConnectingVideoClient handlersOfCall={handlersOfCall} connecting={connecting}
+                                                  imgSrcBackground={imgSrc} fullName={fullName}
                                                   name={name}/>
-    if (connected) return <ConnectedVideoClient fullName={fullName} timeOfCall={timeOfCall}/>
-    if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName} timeOfCall={timeOfCall} name={name}/>
+    if (connected) return <ConnectedVideoClient handlersOfCall={handlersOfCall} fullName={fullName}
+                                                timeOfCall={timeOfCall}/>
+    if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
+                                     timeOfCall={timeOfCall} name={name}/>
     return null;
   };
 
   return (
     <>
       {
-        isIncomingCall ? <IncomingCall fullName={'test'}/> : publishVideo ? renderWithVideo() : renderWithoutVideo()
+        isIncomingCall ? <IncomingCall handlersOfCall={handlersOfCall}
+                                       fullName={'test'}/> : publishVideo ? renderWithVideo() : renderWithoutVideo()
       }
     </>
   )
@@ -466,8 +485,9 @@ class IntemmeetButton extends React.Component {
         isIncomingCall: isIncomming
       }
     }));
-    const Call = e.native;
-    Call.on('pick_up', () => {
+    this.Call = e.native;
+    this.Call.pickUp()
+    this.Call.on('pick_up', () => {
       let counter = 0;
       timerId = setInterval(() => {
         counter += 1000;
@@ -490,7 +510,7 @@ class IntemmeetButton extends React.Component {
         callState: {...state.callState, isActive: true, isIncomingCall: false, connecting: false, connected: true}
       }));
     });
-    Call.on('hang_up', () => {
+    this.Call.on('hang_up', () => {
       clearInterval(timerId);
       this.setState((state) => ({
         ...state,
@@ -504,7 +524,7 @@ class IntemmeetButton extends React.Component {
         }
       }));
     });
-    Call.on('state_changed', ({publishVideo}) => {
+    this.Call.on('state_changed', ({publishVideo}) => {
       this.setState((state) => ({
         ...state,
         callState: {
@@ -513,7 +533,7 @@ class IntemmeetButton extends React.Component {
         }
       }));
     });
-    Call.on('error', () => {
+    this.Call.on('error', () => {
       clearInterval(timerId);
       this.setState((state) => ({
         ...state,
@@ -537,6 +557,30 @@ class IntemmeetButton extends React.Component {
         }));
       }, 5 * 1000)
     });
+  };
+
+  setPickUp = (data) => {
+    //pass data
+    this.Call.pickUp(data);
+  };
+
+  setHangUp = () => {
+    this.Call.hangUp();
+  };
+
+  setVolume = (volume) => {
+    //pass volume
+    this.Call.setVolume(volume);
+  };
+
+  setMic = (isEnabled) => {
+    //pass isEnabled
+    this.Call.setMic(isEnabled);
+  };
+
+  setVideo = (isEnabled) => {
+    //pass isEnabled
+    this.Call.setVideo(isEnabled);
   };
 
   componentDidMount() {
@@ -596,6 +640,11 @@ class IntemmeetButton extends React.Component {
         {
           this.state.callState.isActive ? (
             <CallingComponent
+              handlerPickUp={this.setPickUp}
+              handlerHangUp={this.setHangUp}
+              handlerSetVolume={this.setVolume}
+              handlerSetMic={this.setMic}
+              handlerSetVideo={this.setVideo}
               handlerOnClickProfile={() => this.resetCallState()}
               timeOfCall={this.state.callState.timeOfCall}
               isIncomingCall={this.state.callState.isIncomingCall}
