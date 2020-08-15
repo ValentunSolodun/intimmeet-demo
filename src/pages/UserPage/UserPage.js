@@ -12,7 +12,7 @@ import Dropdown from '../../components/Dropdown';
 import {useOnClickOutside} from '../../helpers/hooks';
 import Loading from '../../components/Loading';
 import _ from 'lodash';
-import IntemmeetButton from '../../components/IntemmeetButton';
+import IntemmeetButton from '../../components/IntimmeetButton';
 
 // const MENU_ITEM = [
 //   {id: 1, name: 'Call', icon: '/images/icons/approvals.svg'},
@@ -83,7 +83,7 @@ const UserPage = ({renderData, getUser}) => {
           isIncomming: false,
           publishVideo: false,
           isOutcomming: true,
-          targetName: 'test User 1'
+          targetData: {name: 'test User 1'}
         })}>
           Outcomming call
         </button>
@@ -91,23 +91,41 @@ const UserPage = ({renderData, getUser}) => {
           isIncomming: false,
           publishVideo: true,
           isOutcomming: true,
-          targetName: 'test User 1'
+          targetData: {name: 'test User 1'}
         })}>
           Outcomming call with video
         </button>
         <button onClick={() => window.onCallEvent('create', {
           isIncomming: true,
           isOutcomming: false,
-          targetName: 'test User 1'
+          targetData: {name: 'test User 1'}
         })}>
           Incomming call
         </button>
         <button onClick={() => window.onCallEvent('pick_up', {publishVideo: true})}>Pick up (with video)</button>
         <button onClick={() => window.onCallEvent('pick_up', {publishVideo: false})}>Pick up</button>
         <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
+        <button onClick={() => window.onCallEvent('state_changed', {subscribeAudio: false})}>State changed (off
+          subscribeAudio)
+        </button>
+        <button onClick={() => window.onCallEvent('state_changed', {subscribeAudio: true})}>State changed (on
+          subscribeAudio)
+        </button>
+        <button onClick={() => window.onCallEvent('state_changed', {subscribeVideo: false})}>State changed (off
+          subscribeVideo)
+        </button>
+        <button onClick={() => window.onCallEvent('state_changed', {subscribeVideo: true})}>State changed (on
+          subscribeVideo)
+        </button>
+
+
         <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)
         </button>
         <button onClick={() => window.onCallEvent('state_changed', {publishVideo: false})}>State changed (off video)
+        </button>
+        <button onClick={() => window.onCallEvent('state_changed', {publishAudio: true})}>State changed (on micro)
+        </button>
+        <button onClick={() => window.onCallEvent('state_changed', {publishAudio: false})}>State changed (off micro)
         </button>
         <button onClick={() => window.onCallEvent('error')}>Error</button>
       </div>

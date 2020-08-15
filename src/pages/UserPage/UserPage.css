@@ -87,7 +87,7 @@
 
 .user-page-avatar-container img.user-avatar-item {
     width: 100%;
-    max-height: 500px;
+    max-width: 500px;
 }
 
 .user-icon-add-to-favourite {
