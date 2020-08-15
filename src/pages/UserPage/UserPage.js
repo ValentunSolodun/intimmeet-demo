@@ -59,7 +59,7 @@ const UserPage = ({renderData, getUser}) => {
       {
         isLoading ? <Loading/> : null
       }
-      <IntemmeetButton classNameOverlayDropdown='user-page-container__dropdown-overlay' user={user} />
+      <IntemmeetButton classNameOverlayDropdown='user-page-container__dropdown-overlay' user={user}/>
       <Icon className='user-icon-add-to-favourite' imgSrc='/images/icons/to_favourite.svg'/>
       <div className='user-avatar-container'>
         <div className='user-page-avatar-container'>
@@ -79,13 +79,36 @@ const UserPage = ({renderData, getUser}) => {
         <Button className='button-back' leftIcon='<' onClick={handlerGoBack} label='Back'/>
       </div>
       <div style={{position: 'absolute', bottom: 5, left: 10}}>
-        <button onClick={() => window.onCallEvent('create', {isIncomming: false, isOutcomming: true, targetName: 'test User 1'})}>Outcomming call</button>
-        <button onClick={() => window.onCallEvent('create', {isIncomming: true, isOutcomming: false, targetName: 'test'})}>Incomming call</button>
+        <button onClick={() => window.onCallEvent('create', {
+          isIncomming: false,
+          publishVideo: false,
+          isOutcomming: true,
+          targetName: 'test User 1'
+        })}>
+          Outcomming call
+        </button>
+        <button onClick={() => window.onCallEvent('create', {
+          isIncomming: false,
+          publishVideo: true,
+          isOutcomming: true,
+          targetName: 'test User 1'
+        })}>
+          Outcomming call with video
+        </button>
+        <button onClick={() => window.onCallEvent('create', {
+          isIncomming: true,
+          isOutcomming: false,
+          targetName: 'test User 1'
+        })}>
+          Incomming call
+        </button>
         <button onClick={() => window.onCallEvent('pick_up', {publishVideo: true})}>Pick up (with video)</button>
         <button onClick={() => window.onCallEvent('pick_up', {publishVideo: false})}>Pick up</button>
         <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)</button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: false})}>State changed (off video)</button>
+        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)
+        </button>
+        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: false})}>State changed (off video)
+        </button>
         <button onClick={() => window.onCallEvent('error')}>Error</button>
       </div>
     </div>
