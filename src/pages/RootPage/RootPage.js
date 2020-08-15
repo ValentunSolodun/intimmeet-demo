@@ -8,7 +8,7 @@ import Button from '../../components/Button';
 import ImageWithText from '../../components/ImageWithText';
 import Loading from '../../components/Loading';
 import {getUsersSelector} from '../../selectors';
-import IntemmeetButton from '../../components/IntemmeetButton';
+import IntemmeetButton from '../../components/IntimmeetButton';
 import {GET_USERS_REQUEST} from '../../actions';
 import Dropdown from '../../components/Dropdown';
 import Icon from '../../components/Icon';
@@ -47,7 +47,6 @@ const RootPage = ({renderData, getUsers}) => {
 
   const {users, isLoading, errors} = renderData;
   useEffect(() => {
-    initialize(JSON.parse(localStorage.getItem('user')).id || null);
     getUsers();
   }, []);
 
