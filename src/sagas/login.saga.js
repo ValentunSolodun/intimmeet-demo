@@ -7,6 +7,7 @@ export function* loginSaga({payload: {login, password}}) {
   try {
     const {data} = yield call(loginRequest, login, password);
     localStorage.setItem('access_token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
     customHistory.push('/');
     yield put({type: LOGIN_SUCCESS});
   } catch (e) {
