@@ -7,6 +7,7 @@ let allowedCreate = false
 export default class Call extends EventTarget {
   constructor(data) {
     super()
+    this.publishVideo = data.publishVideo;
     this.targetName = data.targetName;
     this.isIncomming = data.isIncomming;
     this.isOutcomming = data.isOutcomming;
