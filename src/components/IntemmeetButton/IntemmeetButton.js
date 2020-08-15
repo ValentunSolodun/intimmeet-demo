@@ -486,8 +486,7 @@ class IntemmeetButton extends React.Component {
       }
     }));
     this.Call = e.native;
-    this.Call.pickUp()
-    this.Call.on('pick_up', () => {
+    this.Call.on('pick_up', ({publishVideo}) => {
       let counter = 0;
       timerId = setInterval(() => {
         counter += 1000;
@@ -507,7 +506,14 @@ class IntemmeetButton extends React.Component {
       }, 1000);
       this.setState((state) => ({
         ...state,
-        callState: {...state.callState, isActive: true, isIncomingCall: false, connecting: false, connected: true}
+        callState: {
+          ...state.callState,
+          publishVideo,
+          isActive: true,
+          isIncomingCall: false,
+          connecting: false,
+          connected: true
+        }
       }));
     });
     this.Call.on('hang_up', () => {
