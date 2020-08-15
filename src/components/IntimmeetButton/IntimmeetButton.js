@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './IntemmeetButton.css';
+import './IntimmeetButton.css';
 import Icon from '../Icon';
 import {initialize, callRequest, onCall, offCall} from '../../fake';
 import Dropdown from '../Dropdown';
@@ -43,6 +43,8 @@ const CollingContainer = ({children, offsetTop = '33%', style, ...args}) => {
 const ControlButton = ({
                          isVideo,
                          isIncoming,
+                         subscribeVideo,
+                         subscribeAudio,
                          handlersOfCall = {},
                        }) => {
   return (
@@ -59,15 +61,43 @@ const ControlButton = ({
         ) : isVideo ?
           (
             <>
-              <Icon onClick={handlersOfCall.handlerSetMic} imgSrc='/images/icons/ongoing_call__mute.svg'/>
-              <Icon onClick={handlersOfCall.handlerSetVideo} imgSrc='/images/icons/ongoing_call__video.svg'/>
+              {
+                subscribeVideo ?
+                  (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                         imgSrc='/images/icons/ongoing_call__video.svg'/>)
+                  :
+                  (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                         imgSrc='/images/icons/blue_video_muted.svg'/>)
+              }
+              {
+                subscribeAudio ?
+                  (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                         imgSrc='/images/icons/ongoing_call__mute.svg'/>)
+                  :
+                  (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                         imgSrc='/images/icons/blue_micro_muted_bigger.svg'/>)
+              }
               <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
             </>
           ) :
           (<>
             <Icon onClick={handlersOfCall.handlerSetVolume} imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
-            <Icon onClick={handlersOfCall.handlerSetMic} imgSrc='/images/icons/ongoing_call__mute.svg'/>
-            <Icon onClick={handlersOfCall.handlerSetVideo} imgSrc='/images/icons/ongoing_call__video.svg'/>
+            {
+              subscribeVideo ?
+                (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                       imgSrc='/images/icons/ongoing_call__video.svg'/>)
+                :
+                (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                       imgSrc='/images/icons/blue_video_muted.svg'/>)
+            }
+            {
+              subscribeAudio ?
+                (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                       imgSrc='/images/icons/ongoing_call__mute.svg'/>)
+                :
+                (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                       imgSrc='/images/icons/blue_micro_muted_bigger.svg'/>)
+            }
             <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
           </>)
       }
@@ -87,7 +117,7 @@ const IncomingCall = ({fullName, handlersOfCall}) => {
   )
 };
 
-const ConnectingClient = ({name, fullName, handlersOfCall}) => {
+const ConnectingClient = ({name, fullName, handlersOfCall, subscribeVideo, subscribeAudio}) => {
   return (
     <CollingContainer>
       <div className='calling-container__connection-top-icons'>
@@ -103,7 +133,7 @@ const ConnectingClient = ({name, fullName, handlersOfCall}) => {
           <b>TIP:</b> Keep the call short. Save the lengthy talk for your first date!
         </span>
       </div>
-      <ControlButton handlersOfCall={handlersOfCall}/>
+      <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}/>
       <div className='calling-container__full-name-of-client'>
         {fullName}
       </div>
@@ -111,12 +141,19 @@ const ConnectingClient = ({name, fullName, handlersOfCall}) => {
   )
 };
 
-const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall}) => {
+const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall, publishAudio, subscribeVideo, subscribeAudio}) => {
   return (
     <CollingContainer>
       <div className='calling-container__time-of-call'>
         <div>{timeOfCall}</div>
         <div>You are in a call with <br/> <b>{fullName}</b></div>
+        {
+          !publishAudio ? (
+            <div>
+              <Icon imgSrc='/images/icons/blue_micro_muted.svg'/>
+            </div>
+          ) : null
+        }
       </div>
       <div className='calling-container__voice-indicator'>
         <img src="/images/icons/voice_indicator.svg" alt="Voice Indicator"/>
@@ -126,7 +163,7 @@ const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall}) => {
           <b>TIP:</b> Show interest by being a good listener
         </span>
       </div>
-      <ControlButton handlersOfCall={handlersOfCall}/>
+      <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}/>
     </CollingContainer>
   )
 };
@@ -183,7 +220,7 @@ const EndedCall = ({fullName, handlerOnClickProfile, name, timeOfCall, reliabili
   )
 };
 
-const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, handlersOfCall}) => {
+const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, handlersOfCall, subscribeVideo, subscribeAudio}) => {
 
   const [typeOfVideoCall, setTypeOfVideoCall] = useState(connecting ? 'regular' : '');
 
@@ -236,7 +273,8 @@ const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, ha
           <div>
             {fullName}
           </div>
-          <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
+          <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}
+                         isVideo={true}/>
         </div>
       </div>
     </CollingContainer>
@@ -259,7 +297,7 @@ const ProgressBarr = ({progress, ...args}) => {
 };
 
 //TODO: Need to implement video element
-const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall}) => {
+const ConnectedVideoClient = ({publishAudio, passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall, subscribeVideo, subscribeAudio}) => {
   return (
     <CollingContainer offsetTop='10%' style={{paddingTop: 50}}>
       <div className='calling-container__video-container'>
@@ -270,6 +308,9 @@ const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcB
           <div className='calling-container__connection-top-icons top-icons-into-video-call'>
             <div>{timeOfCall}</div>
             <div>
+              {
+                !publishAudio ? (<Icon imgSrc='/images/icons/blue_micro_muted.svg'/>) : null
+              }
               <Icon imgSrc='/images/icons/white_dont_enter.svg'/>
               <Icon imgSrc='/images/icons/white_alert.svg'/>
             </div>
@@ -287,7 +328,8 @@ const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcB
             <br/>
             <b>{fullName}</b>
           </div>
-          <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
+          <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}
+                         isVideo={true}/>
         </div>
       </div>
     </CollingContainer>
@@ -348,7 +390,7 @@ const CallingComponent = ({
                             handlerPickUp,
                             handlerHangUp,
                             handlerSetVolume,
-                            handlerSetMic,
+                            handlerSetAudio,
                             handlerSetVideo,
                             name,
                             targetName,
@@ -359,6 +401,8 @@ const CallingComponent = ({
                             connected,
                             publishVideo,
                             publishAudio,
+                            subscribeVideo,
+                            subscribeAudio,
                             imgSrc,
                             timeOfCall,
                             callEnded
@@ -368,24 +412,30 @@ const CallingComponent = ({
     handlerPickUp,
     handlerHangUp,
     handlerSetVolume,
-    handlerSetMic,
+    handlerSetAudio,
     handlerSetVideo,
   };
 
 
   const renderWithoutVideo = () => {
-    if (connecting) return <ConnectingClient handlersOfCall={handlersOfCall} fullName={fullName} name={name}/>
-    if (connected) return <ConnectedClient handlersOfCall={handlersOfCall} fullName={fullName} timeOfCall={timeOfCall}/>
+    if (connecting) return <ConnectingClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
+                                             handlersOfCall={handlersOfCall} fullName={fullName} name={name}/>
+    if (connected) return <ConnectedClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
+                                           publishAudio={publishAudio} handlersOfCall={handlersOfCall}
+                                           fullName={fullName} timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
                                      timeOfCall={timeOfCall} name={name}/>
     return null;
   };
 
   const renderWithVideo = () => {
-    if (connecting) return <ConnectingVideoClient handlersOfCall={handlersOfCall} connecting={connecting}
+    if (connecting) return <ConnectingVideoClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
+                                                  handlersOfCall={handlersOfCall} connecting={connecting}
                                                   imgSrcBackground={imgSrc} fullName={fullName}
                                                   name={name}/>
-    if (connected) return <ConnectedVideoClient handlersOfCall={handlersOfCall} fullName={fullName}
+    if (connected) return <ConnectedVideoClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
+                                                publishAudio={publishAudio} handlersOfCall={handlersOfCall}
+                                                fullName={fullName}
                                                 timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedVideoCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
                                           timeOfCall={timeOfCall} name={name}/>
@@ -424,7 +474,7 @@ const Error = ({text}) => {
   )
 };
 
-class IntemmeetButton extends React.Component {
+class IntimmeetButton extends React.Component {
 
   state = {
     showMenu: false,
@@ -442,6 +492,8 @@ class IntemmeetButton extends React.Component {
       isIncomingCall: false,
       publishVideo: false,
       publishAudio: true,
+      subscribeVideo: false,
+      subscribeAudio: true,
       connecting: false,
       connected: false,
       callEnded: false
@@ -526,12 +578,12 @@ class IntemmeetButton extends React.Component {
   handlerOnCall = (e) => {
     let timerId = null;
     this.resetCallTime();
-    const {isIncomming, isOutcomming, publishVideo, targetName} = e.native;
+    const {isIncomming, isOutcomming, publishVideo, targetData} = e.native;
     this.setState((state) => ({
       ...state,
       callState: {
         ...state.callState,
-        targetName,
+        targetName: targetData.name,
         isActive: true,
         publishVideo,
         publishAudio: true,
@@ -539,7 +591,9 @@ class IntemmeetButton extends React.Component {
         isIncomingCall: isIncomming
       }
     }));
+
     this.Call = e.native;
+
     this.Call.on('pick_up', ({publishVideo}) => {
       let counter = 0;
       this.setState((state) => ({
@@ -571,6 +625,7 @@ class IntemmeetButton extends React.Component {
         )
       }, 1000);
     });
+
     this.Call.on('hang_up', () => {
       clearInterval(timerId);
       this.setState((state) => ({
@@ -585,16 +640,17 @@ class IntemmeetButton extends React.Component {
         }
       }));
     });
-    this.Call.on('state_changed', ({publishVideo, publishAudio}) => {
+
+    this.Call.on('state_changed', (data) => {
       this.setState((state) => ({
         ...state,
         callState: {
           ...state.callState,
-          publishVideo: publishVideo,
-          publishAudio: publishAudio
+          ...data
         }
       }));
     });
+
     this.Call.on('error', () => {
       clearInterval(timerId);
       this.setState((state) => ({
@@ -622,7 +678,6 @@ class IntemmeetButton extends React.Component {
   };
 
   setPickUp = (data) => {
-    //pass data
     this.Call.pickUp(data);
   };
 
@@ -631,13 +686,11 @@ class IntemmeetButton extends React.Component {
   };
 
   setVolume = (volume) => {
-    //pass volume
     this.Call.setVolume(volume);
   };
 
-  setMic = (isEnabled) => {
-    //pass isEnabled
-    this.Call.setMic(isEnabled);
+  setAudio = (isEnabled) => {
+    this.Call.setAudio(isEnabled);
   };
 
   setVideo = (isEnabled) => {
@@ -651,7 +704,7 @@ class IntemmeetButton extends React.Component {
 
   componentWillUnmount() {
     offCall(this.handlerOnCall);
-  }
+  };
 
   handlerOnClickPhoneIcon = () => {
     if (this.state.callState.isActive) return;
@@ -661,12 +714,12 @@ class IntemmeetButton extends React.Component {
 
   handlerOnClickMenu = (key) => {
     if (key === 'Call') {
-      callRequest(this.props.user.id, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
+      callRequest(this.props.user.guId, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
       this.setState((state) => ({...state, showMenu: false}));
     }
 
     if (key === 'Video Call') {
-      callRequest(this.props.user.id, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
+      callRequest(this.props.user.guId, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
       this.setState((state) => ({...state, showMenu: false}));
     }
     this.setState({selectedMenu: key});
@@ -703,13 +756,15 @@ class IntemmeetButton extends React.Component {
               handlerPickUp={this.setPickUp}
               handlerHangUp={this.setHangUp}
               handlerSetVolume={this.setVolume}
-              handlerSetMic={this.setMic}
+              handlerSetAudio={this.setAudio}
               handlerSetVideo={this.setVideo}
               handlerOnClickProfile={() => this.resetCallState()}
               timeOfCall={this.state.callState.timeOfCall}
               isIncomingCall={this.state.callState.isIncomingCall}
               publishVideo={this.state.callState.publishVideo}
               publishAudio={this.state.callState.publishAudio}
+              subscribeVideo={this.state.callState.subscribeVideo}
+              subscribeAudio={this.state.callState.subscribeAudio}
               connecting={this.state.callState.connecting}
               connected={this.state.callState.connected}
               callEnded={this.state.callState.callEnded}
@@ -799,4 +854,4 @@ class IntemmeetButton extends React.Component {
   }
 }
 
-export default IntemmeetButton;
+export default IntimmeetButton;
