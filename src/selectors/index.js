@@ -1,4 +1,5 @@
-import {createSelector} from 'reselect'
+import {createSelector} from 'reselect';
+import _ from 'lodash';
 
 export const getUsersSelector = createSelector(
   state => state.users.data,
