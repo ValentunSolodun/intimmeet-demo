@@ -88,9 +88,10 @@
     padding: 0 50px;
 }
 
-.calling-container > div.calling-container__control-button .icon-container {
+.calling-container__control-button .icon-container {
     height: 28px;
     width: 28px;
+    padding: 0 5px;
 }
 
 .calling-container > div.calling-container__full-name-of-client {
@@ -203,10 +204,35 @@
 }
 
 .calling-container__video-container.call-ended {
-    height: 128px;
     width: 100%;
     color: #fff !important;
     position: relative;
+}
+
+.calling-container__video-container.call-ended .calling-container__ended-call-info {
+    padding: 40px 31px 20px 31px;
+}
+
+.calling-container__video-container.call-ended .calling-container__ended-call-info > div {
+    margin-bottom: 11px;
+}
+
+.calling-container__video-container.call-ended > div:nth-child(1) > div {
+    color: #fff;
+}
+
+.calling-container__video-container.call-ended .calling-container__ended-call-info > div:nth-child(1) {
+    font-size: 14px;
+    color: #fff;
+}
+
+.calling-container__video-container.call-ended .calling-container__ended-call-info > div:nth-child(3) {
+    font-size: 10px;
+    color: #fff;
+}
+
+.calling-container__video-container.call-ended .calling-container__ended-call-info > div:nth-child(4) button {
+    font-size: 11px;
 }
 
 .calling-container .calling-container__background-placeholder {

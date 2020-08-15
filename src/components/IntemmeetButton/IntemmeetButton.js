@@ -46,7 +46,7 @@ const ControlButton = ({
                          handlersOfCall = {},
                        }) => {
   return (
-    <>
+    <div className='calling-container__control-button'>
       {
         isIncoming ? (
           <>
@@ -72,7 +72,7 @@ const ControlButton = ({
           </>)
       }
 
-    </>
+    </div>
   )
 };
 
@@ -82,9 +82,7 @@ const IncomingCall = ({fullName, handlersOfCall}) => {
       <div className='calling-container__full-name-of-client'>
         {fullName}
       </div>
-      <div className='calling-container__control-button'>
-        <ControlButton handlersOfCall={handlersOfCall} isIncoming={true}/>
-      </div>
+      <ControlButton handlersOfCall={handlersOfCall} isIncoming={true}/>
     </CollingContainer>
   )
 };
@@ -105,9 +103,7 @@ const ConnectingClient = ({name, fullName, handlersOfCall}) => {
           <b>TIP:</b> Keep the call short. Save the lengthy talk for your first date!
         </span>
       </div>
-      <div className='calling-container__control-button'>
-        <ControlButton handlersOfCall={handlersOfCall}/>
-      </div>
+      <ControlButton handlersOfCall={handlersOfCall}/>
       <div className='calling-container__full-name-of-client'>
         {fullName}
       </div>
@@ -130,9 +126,7 @@ const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall}) => {
           <b>TIP:</b> Show interest by being a good listener
         </span>
       </div>
-      <div className='calling-container__control-button'>
-        <ControlButton handlersOfCall={handlersOfCall}/>
-      </div>
+      <ControlButton handlersOfCall={handlersOfCall}/>
     </CollingContainer>
   )
 };
@@ -242,9 +236,7 @@ const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, ha
           <div>
             {fullName}
           </div>
-          <div>
-            <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
-          </div>
+          <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
         </div>
       </div>
     </CollingContainer>
@@ -295,9 +287,7 @@ const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcB
             <br/>
             <b>{fullName}</b>
           </div>
-          <div>
-            <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
-          </div>
+          <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>
         </div>
       </div>
     </CollingContainer>
@@ -340,9 +330,7 @@ const EndedVideoCall = ({name, timeOfCall, fullName, handlerOnClickProfile}) => 
         {/*    <br/>*/}
         {/*    <b>{fullName}</b>*/}
         {/*  </div>*/}
-        {/*  <div>*/}
         {/*    <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>*/}
-        {/*  </div>*/}
         {/*</div>*/}
       </div>
       <div className='calling-container__full-name-of-client'>
@@ -554,6 +542,18 @@ class IntemmeetButton extends React.Component {
     this.Call = e.native;
     this.Call.on('pick_up', ({publishVideo}) => {
       let counter = 0;
+      this.setState((state) => ({
+        ...state,
+        callState: {
+          ...state.callState,
+          publishVideo,
+          isActive: true,
+          isIncomingCall: false,
+          connecting: false,
+          connected: true
+        }
+      }));
+      if (timerId) return;
       timerId = setInterval(() => {
         counter += 1000;
 
@@ -570,17 +570,6 @@ class IntemmeetButton extends React.Component {
           })
         )
       }, 1000);
-      this.setState((state) => ({
-        ...state,
-        callState: {
-          ...state.callState,
-          publishVideo,
-          isActive: true,
-          isIncomingCall: false,
-          connecting: false,
-          connected: true
-        }
-      }));
     });
     this.Call.on('hang_up', () => {
       clearInterval(timerId);
