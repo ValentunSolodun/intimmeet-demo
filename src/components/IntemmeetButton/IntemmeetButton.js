@@ -304,6 +304,58 @@ const ConnectedVideoClient = ({passion = 20, name, timeOfCall, fullName, imgSrcB
   )
 };
 
+const EndedVideoCall = ({name, timeOfCall, fullName, handlerOnClickProfile}) => {
+  return (
+    <CollingContainer offsetTop='10%'>
+      <div className='calling-container__video-container call-ended'>
+        {/*<div className='calling-container__passion-detector-text'>Passion Detector</div>*/}
+        {/*<ProgressBarr style={{position: "absolute", top: 32, left: 0}} progress={50}/>*/}
+
+        <div className='calling-container__connection-top-icons top-icons-into-video-call'>
+          <div>{timeOfCall}</div>
+          <div>
+            <Icon imgSrc='/images/icons/white_dont_enter.svg'/>
+            <Icon imgSrc='/images/icons/white_alert.svg'/>
+          </div>
+        </div>
+        <div className='calling-container__ended-call-info'>
+          <div>Video Call Ended {timeOfCall}</div>
+          <div className='audio-emotion-analysis'>
+            <Icon imgSrc="/images/icons/pink_heart.svg"/>
+            <span>Audio-emotion Analysis</span>
+          </div>
+          <div>
+            {name} showed the highest
+            passion levels throughout the call.
+            Love is in the air
+          </div>
+          <div>
+            <Button style='red' label='How truthful was Denise?'/>
+          </div>
+        </div>
+
+        {/*<div className='calling-container__video-control-button_container'>*/}
+        {/*  <div>*/}
+        {/*    You are in a call with*/}
+        {/*    <br/>*/}
+        {/*    <b>{fullName}</b>*/}
+        {/*  </div>*/}
+        {/*  <div>*/}
+        {/*    <ControlButton handlersOfCall={handlersOfCall} isVideo={true}/>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+      </div>
+      <div className='calling-container__full-name-of-client'>
+        {fullName}
+      </div>
+
+      <div>
+        <Button onClick={handlerOnClickProfile} style='red' label='Profile'/>
+      </div>
+    </CollingContainer>
+  )
+};
+
 const CallingComponent = ({
                             handlerPickUp,
                             handlerHangUp,
@@ -311,12 +363,14 @@ const CallingComponent = ({
                             handlerSetMic,
                             handlerSetVideo,
                             name,
+                            targetName,
                             handlerOnClickProfile,
                             fullName,
                             isIncomingCall,
                             connecting,
                             connected,
                             publishVideo,
+                            publishAudio,
                             imgSrc,
                             timeOfCall,
                             callEnded
@@ -345,8 +399,8 @@ const CallingComponent = ({
                                                   name={name}/>
     if (connected) return <ConnectedVideoClient handlersOfCall={handlersOfCall} fullName={fullName}
                                                 timeOfCall={timeOfCall}/>
-    if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
-                                     timeOfCall={timeOfCall} name={name}/>
+    if (callEnded) return <EndedVideoCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
+                                          timeOfCall={timeOfCall} name={name}/>
     return null;
   };
 
@@ -354,7 +408,7 @@ const CallingComponent = ({
     <>
       {
         isIncomingCall ? <IncomingCall handlersOfCall={handlersOfCall}
-                                       fullName={'test'}/> : publishVideo ? renderWithVideo() : renderWithoutVideo()
+                                       fullName={targetName}/> : publishVideo ? renderWithVideo() : renderWithoutVideo()
       }
     </>
   )
@@ -388,14 +442,18 @@ class IntemmeetButton extends React.Component {
     showMenu: false,
     selectedMenu: '',
     callState: {
+      isActive: false,
+      micro: true,
+      volume: 100,
       error: {
         status: false,
         text: ''
       },
-      isActive: false,
+      targetName: '',
       timeOfCall: '00:00',
       isIncomingCall: false,
       publishVideo: false,
+      publishAudio: true,
       connecting: false,
       connected: false,
       callEnded: false
@@ -436,6 +494,10 @@ class IntemmeetButton extends React.Component {
     },
   }
 
+  constructor(props) {
+    super(props);
+  }
+
   // constructor(props) {
   //   super(props);
   // }
@@ -455,14 +517,17 @@ class IntemmeetButton extends React.Component {
       ...state,
       callState: {
         ...state.callState,
+        isActive: false,
+        micro: true,
+        volume: 100,
         error: {
           status: false,
           text: ''
         },
-        isActive: false,
         timeOfCall: '00:00',
         isIncomingCall: false,
         publishVideo: false,
+        publishAudio: true,
         connecting: false,
         connected: false,
         callEnded: false
@@ -473,14 +538,15 @@ class IntemmeetButton extends React.Component {
   handlerOnCall = (e) => {
     let timerId = null;
     this.resetCallTime();
-    const {isIncomming, isOutcomming, targetName} = e.native;
+    const {isIncomming, isOutcomming, publishVideo, targetName} = e.native;
     this.setState((state) => ({
       ...state,
       callState: {
         ...state.callState,
-        targetName: targetName,
+        targetName,
         isActive: true,
-        publishVideo: false,
+        publishVideo,
+        publishAudio: true,
         connecting: true,
         isIncomingCall: isIncomming
       }
@@ -530,12 +596,13 @@ class IntemmeetButton extends React.Component {
         }
       }));
     });
-    this.Call.on('state_changed', ({publishVideo}) => {
+    this.Call.on('state_changed', ({publishVideo, publishAudio}) => {
       this.setState((state) => ({
         ...state,
         callState: {
           ...state.callState,
-          publishVideo: publishVideo
+          publishVideo: publishVideo,
+          publishAudio: publishAudio
         }
       }));
     });
@@ -604,17 +671,15 @@ class IntemmeetButton extends React.Component {
   };
 
   handlerOnClickMenu = (key) => {
-    // if (key === 'Call') {
-    //   callRequest(this.props.user.id, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
-    //   this.setState({showMenu: false});
-    //   this.setState({calling: {isActive: true, video: false}});
-    // }
-    //
-    // if (key === 'Video Call') {
-    //   callRequest(this.props.user.id, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
-    //   this.setState({showMenu: false});
-    //   this.setState({calling: {isActive: true, video: true}});
-    // }
+    if (key === 'Call') {
+      callRequest(this.props.user.id, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
+      this.setState((state) => ({...state, showMenu: false}));
+    }
+
+    if (key === 'Video Call') {
+      callRequest(this.props.user.id, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
+      this.setState((state) => ({...state, showMenu: false}));
+    }
     this.setState({selectedMenu: key});
   };
 
@@ -655,11 +720,13 @@ class IntemmeetButton extends React.Component {
               timeOfCall={this.state.callState.timeOfCall}
               isIncomingCall={this.state.callState.isIncomingCall}
               publishVideo={this.state.callState.publishVideo}
+              publishAudio={this.state.callState.publishAudio}
               connecting={this.state.callState.connecting}
               connected={this.state.callState.connected}
               callEnded={this.state.callState.callEnded}
               imgSrc={_.get(this.props, 'user.imgSrc') || null}
               name={_.get(this.props, 'user.name') || 'test user name'}
+              targetName={this.state.callState.targetName}
               fullName={_.get(this.props, 'user.name') || null}
             />
           ) : null

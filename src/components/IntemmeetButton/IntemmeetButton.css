@@ -202,6 +202,13 @@
     color: #707070;
 }
 
+.calling-container__video-container.call-ended {
+    height: 128px;
+    width: 100%;
+    color: #fff !important;
+    position: relative;
+}
+
 .calling-container .calling-container__background-placeholder {
     box-sizing: border-box;
     border-radius: 11px;
