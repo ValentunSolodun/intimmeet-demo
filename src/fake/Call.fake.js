@@ -8,7 +8,7 @@ export default class Call extends EventTarget {
   constructor(data) {
     super()
     this.publishVideo = data.publishVideo;
-    this.targetName = data.targetName;
+    this.targetData = data.targetData;
     this.isIncomming = data.isIncomming;
     this.isOutcomming = data.isOutcomming;
     this.id = Math.random();
@@ -67,8 +67,8 @@ export default class Call extends EventTarget {
     console.log(this.id, 'Call.setVolume', volume)
   }
 
-  async setMic(isEnabled) {
-    console.log(this.id, 'Call.setMic', isEnabled)
+  async setAudio(isEnabled) {
+    console.log(this.id, 'Call.setAudio', isEnabled)
   }
 
   async setVideo(isEnabled) {
