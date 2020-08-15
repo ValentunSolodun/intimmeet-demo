@@ -81,6 +81,7 @@ const UserPage = ({renderData, getUser}) => {
       <div style={{position: 'absolute', bottom: 5, left: 10}}>
         <button onClick={() => window.onCallEvent('create', {isIncomming: false, isOutcomming: true, targetName: 'test User 1'})}>Outcomming call</button>
         <button onClick={() => window.onCallEvent('create', {isIncomming: true, isOutcomming: false, targetName: 'test'})}>Incomming call</button>
+        <button onClick={() => window.onCallEvent('pick_up', {publishVideo: true})}>Pick up (with video)</button>
         <button onClick={() => window.onCallEvent('pick_up', {publishVideo: false})}>Pick up</button>
         <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
         <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)</button>
