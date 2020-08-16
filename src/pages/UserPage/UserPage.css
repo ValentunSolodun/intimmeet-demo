@@ -76,6 +76,11 @@
     position: relative;
 }
 
+.user-avatar-container .user-avatar-item {
+    display: block;
+    margin: 0 auto;
+}
+
 .user-name-container {
     position: absolute;
     background: #fff;
