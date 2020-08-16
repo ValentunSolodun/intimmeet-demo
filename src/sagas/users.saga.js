@@ -1,14 +1,6 @@
-import {put, call} from 'redux-saga/effects';
-import {getUsers, getUser, getUserIds} from '../api';
-import _ from 'lodash';
-import {
-  GET_USERS_FAILED,
-  GET_USERS_SUCCESS,
-  GET_USER_SUCCESS,
-  GET_USER_FAILED,
-  GET_USERS_IDS_SUCCESS
-} from '../actions';
-import {initialize} from '../fake';
+import {call, put} from 'redux-saga/effects';
+import {getUser, getUsers} from '../api';
+import {GET_USER_FAILED, GET_USER_SUCCESS, GET_USERS_FAILED, GET_USERS_SUCCESS} from '../actions';
 
 export function* getUsersSaga() {
   try {

@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './IntimmeetButton.css';
 import Icon from '../Icon';
-import {initialize, callRequest, onCall, offCall} from '../../fake';
+import {IntimMeet} from '../../fake';
+// import {IntimMeet} from 'client-lib';
 import Dropdown from '../Dropdown';
 import cn from 'classnames';
 import moment from 'moment';
@@ -48,7 +49,7 @@ const Publisher = ({...args}) => {
 
 const Subscriber = ({...args}) => {
   return (
-    <div {...args} id='subscriber'>test sub</div>
+    <div {...args} id='subscriber'></div>
   )
 };
 
@@ -610,7 +611,7 @@ class IntimmeetButton extends React.Component {
   handlerOnCall = (e) => {
     let timerId = null;
     this.resetCallTime();
-    const {isIncomming, isOutcomming, publishVideo, targetData} = e.native;
+    const {isIncoming, isOutcoming, publishVideo, targetData} = e.native;
     this.setState((state) => ({
       ...state,
       callState: {
@@ -620,19 +621,22 @@ class IntimmeetButton extends React.Component {
         publishVideo,
         publishAudio: true,
         connecting: true,
-        isIncomingCall: isIncomming
+        isIncomingCall: isIncoming
       }
     }));
 
     this.Call = e.native;
 
-    this.Call.on('pick_up', ({subscribeVideo}) => {
+    this.Call.on('pick_up', () => {
       let counter = 0;
       this.setState((state) => ({
         ...state,
         callState: {
           ...state.callState,
-          subscribeVideo,
+          publishVideo: this.Call.publishVideo,
+          publishAudio: this.Call.publishAudio,
+          subscribeVideo: this.Call.subscribeVideo,
+          subscribeAudio: this.Call.subscribeAudio,
           isActive: true,
           isIncomingCall: false,
           connecting: false,
@@ -673,17 +677,25 @@ class IntimmeetButton extends React.Component {
       }));
     });
 
-    this.Call.on('state_changed', (data) => {
+    this.Call.on('state_changed', () => {
       this.setState((state) => ({
         ...state,
         callState: {
           ...state.callState,
-          ...data
+          subscribeVideo: this.Call.subscribeVideo,
+          subscribeAudio: this.Call.subscribeAudio,
+          publishVideo: this.Call.publishVideo,
+          publishAudio: this.Call.publishAudio,
         }
       }));
     });
 
     this.Call.on('error', ({native}) => {
+      const message = _.has(native, 'message') ?
+        native.message :
+        _.isString(native) ?
+          native :
+          'Some error happened';
       clearInterval(timerId);
       this.setState((state) => ({
         ...state,
@@ -694,7 +706,7 @@ class IntimmeetButton extends React.Component {
           connecting: false,
           connected: false,
           callEnded: this.state.callState.connected || this.state.callState.connecting,
-          error: {status: true, text: native}
+          error: {status: true, text: message}
         }
       }));
       setTimeout(() => {
@@ -718,7 +730,7 @@ class IntimmeetButton extends React.Component {
   };
 
   setVolume = (volume) => {
-    this.Call.setVolume(volume);
+    this.Call.setVolume(100);
   };
 
   setAudio = (isEnabled) => {
@@ -731,11 +743,11 @@ class IntimmeetButton extends React.Component {
   };
 
   componentDidMount() {
-    onCall(this.handlerOnCall);
+    IntimMeet.onCall(this.handlerOnCall);
   };
 
   componentWillUnmount() {
-    offCall(this.handlerOnCall);
+    IntimMeet.offCall(this.handlerOnCall);
   };
 
   handlerOnClickPhoneIcon = () => {
@@ -746,12 +758,12 @@ class IntimmeetButton extends React.Component {
 
   handlerOnClickMenu = (key) => {
     if (key === 'Call') {
-      callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
+      IntimMeet.callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
       this.setState((state) => ({...state, showMenu: false}));
     }
 
     if (key === 'Video Call') {
-      callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
+      IntimMeet.callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
       this.setState((state) => ({...state, showMenu: false}));
     }
     this.setState({selectedMenu: key});

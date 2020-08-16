@@ -7,10 +7,15 @@ let allowedCreate = false
 export default class Call extends EventTarget {
   constructor(data) {
     super()
-    this.publishVideo = data.publishVideo;
-    this.targetData = data.targetData;
-    this.isIncomming = data.isIncomming;
-    this.isOutcomming = data.isOutcomming;
+    this.isHangUp = false
+    this.isPickUp = false
+    this.publishAudio = !!data.publishAudio;
+    this.publishVideo = !!data.publishVideo;
+    this.subscribeAudio = false;
+    this.subscribeVideo = false;
+    this.targetData = !!data.targetData;
+    this.isIncoming = !!data.isIncoming;
+    this.isOutcoming = !!data.isOutcoming;
     this.id = Math.random();
   }
 
@@ -30,6 +35,10 @@ export default class Call extends EventTarget {
     }
     if (!currentCall) return
     if (event === 'pick_up') {
+      currentCall.publishAudio = !!data.publishAudio;
+      currentCall.publishVideo = !!data.publishVideo;
+      currentCall.subscribeAudio = !!data.subscribeAudio;
+      currentCall.subscribeVideo = !!data.subscribeVideo;
       this._publisher = document.querySelector('#publisher');
       this._subscriber = document.querySelector('#subscriber');
       if (!this._publisher || !this._subscriber) {
@@ -38,7 +47,7 @@ export default class Call extends EventTarget {
       }
       setTimeout(() => {
         console.log(currentCall.id, 'Emit pick_up');
-        currentCall._emit('pick_up', data)
+        currentCall._emit('pick_up')
         currentCall._checker = setInterval(() => {
           if (document.querySelector('#publisher') !== this._publisher ||
             document.querySelector('#subscriber') !== this._subscriber) {
@@ -48,9 +57,13 @@ export default class Call extends EventTarget {
       }, 100)
     }
     if (event === 'state_changed') {
+      currentCall.publishAudio = !!data.publishAudio;
+      currentCall.publishVideo = !!data.publishVideo;
+      currentCall.subscribeAudio = !!data.subscribeAudio;
+      currentCall.subscribeVideo = !!data.subscribeVideo;
       setTimeout(() => {
         console.log(currentCall.id, 'Emit state_changed');
-        currentCall._emit('state_changed', data)
+        currentCall._emit('state_changed')
       }, 100)
     }
     if (event === 'hang_up') {

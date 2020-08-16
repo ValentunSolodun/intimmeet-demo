@@ -1,17 +1,12 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './UserPage.css';
 import {connect} from 'react-redux';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
-import PhoneIcon from '../../components/PhoneIcon';
 import {getUserSelector} from '../../selectors';
 import {customHistory} from '../../helpers/history';
 import {GET_USER_REQUEST} from '../../actions';
-import Hint from '../../components/Hint';
-import Dropdown from '../../components/Dropdown';
-import {useOnClickOutside} from '../../helpers/hooks';
 import Loading from '../../components/Loading';
-import _ from 'lodash';
 import IntemmeetButton from '../../components/IntimmeetButton';
 
 // const MENU_ITEM = [
@@ -77,57 +72,6 @@ const UserPage = ({renderData, getUser}) => {
           </div>
         </div>
         <Button className='button-back' leftIcon='<' onClick={handlerGoBack} label='Back'/>
-      </div>
-      <div style={{position: 'absolute', bottom: 5, left: 10}}>
-        <button onClick={() => window.onCallEvent('create', {
-          isIncomming: false,
-          publishVideo: false,
-          isOutcomming: true,
-          targetData: {name: 'test User 1'}
-        })}>
-          Outcomming call
-        </button>
-        <button onClick={() => window.onCallEvent('create', {
-          isIncomming: false,
-          publishVideo: true,
-          isOutcomming: true,
-          targetData: {name: 'test User 1'}
-        })}>
-          Outcomming call with video
-        </button>
-        <button onClick={() => window.onCallEvent('create', {
-          isIncomming: true,
-          isOutcomming: false,
-          targetData: {name: 'test User 1'}
-        })}>
-          Incomming call
-        </button>
-        <button onClick={() => window.onCallEvent('pick_up', {subscribeVideo: true})}>Pick up (with video)</button>
-        <button onClick={() => window.onCallEvent('pick_up', {subscribeVideo: false})}>Pick up</button>
-        <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
-        <button onClick={() => window.onCallEvent('state_changed', {subscribeAudio: false})}>State changed (off
-          subscribeAudio)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {subscribeAudio: true})}>State changed (on
-          subscribeAudio)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {subscribeVideo: false})}>State changed (off
-          subscribeVideo)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {subscribeVideo: true})}>State changed (on
-          subscribeVideo)
-        </button>
-
-
-        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: false})}>State changed (off video)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishAudio: true})}>State changed (on micro)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishAudio: false})}>State changed (off micro)
-        </button>
-        <button onClick={() => window.onCallEvent('error')}>Error</button>
       </div>
     </div>
   )

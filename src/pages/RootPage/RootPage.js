@@ -1,21 +1,14 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './RootPage.css';
 import {connect} from 'react-redux';
-import {initialize, callRequest, onCall, offCall} from '../../fake';
-import PhoneIcon from '../../components/PhoneIcon';
-import Menu from '../../components/Menu/Menu';
 import Button from '../../components/Button';
 import ImageWithText from '../../components/ImageWithText';
 import Loading from '../../components/Loading';
 import {getUsersSelector} from '../../selectors';
 import IntemmeetButton from '../../components/IntimmeetButton';
 import {GET_USERS_REQUEST} from '../../actions';
-import Dropdown from '../../components/Dropdown';
-import Icon from '../../components/Icon';
-import Hint from '../../components/Hint';
 import _ from 'lodash';
 import cn from 'classnames';
-import {useOnClickOutside} from '../../helpers/hooks';
 import {customHistory} from '../../helpers/history';
 
 const MENU_ITEM = [
@@ -77,27 +70,6 @@ const RootPage = ({renderData, getUsers}) => {
             )
           })
         }
-      </div>
-      <div style={{position: 'absolute', bottom: 5, left: 10}}>
-        <button onClick={() => window.onCallEvent('create', {
-          isIncomming: false,
-          isOutcomming: true,
-          targetName: 'test'
-        })}>Outcomming call
-        </button>
-        <button onClick={() => window.onCallEvent('create', {
-          isIncomming: true,
-          isOutcomming: false,
-          targetName: 'test'
-        })}>Incomming call
-        </button>
-        <button onClick={() => window.onCallEvent('pick_up')}>Pick up</button>
-        <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: true})}>State changed (on video)
-        </button>
-        <button onClick={() => window.onCallEvent('state_changed', {publishVideo: false})}>State changed (off video)
-        </button>
-        <button onClick={() => window.onCallEvent('error')}>Error</button>
       </div>
     </div>
   )
