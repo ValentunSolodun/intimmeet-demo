@@ -714,12 +714,12 @@ class IntimmeetButton extends React.Component {
 
   handlerOnClickMenu = (key) => {
     if (key === 'Call') {
-      callRequest(this.props.user.guId, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
+      callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
       this.setState((state) => ({...state, showMenu: false}));
     }
 
     if (key === 'Video Call') {
-      callRequest(this.props.user.guId, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
+      callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
       this.setState((state) => ({...state, showMenu: false}));
     }
     this.setState({selectedMenu: key});

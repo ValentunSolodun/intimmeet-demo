@@ -10,9 +10,9 @@ const STYLE_OF_BUTTONS = {
 
 const Button = ({onClick, style, className, classNameButton, label, leftIcon}) => {
   return (
-    <div className={cn(STYLE_OF_BUTTONS[style], 'button-container', className)}>
+    <div className={cn(STYLE_OF_BUTTONS[style], 'button-container', className)} onClick={onClick}>
       {leftIcon}
-      <button onClick={onClick} className={cn('common-button-style', classNameButton)}>
+      <button className={cn('common-button-style', classNameButton)}>
         {label}
       </button>
     </div>

@@ -1,18 +1,11 @@
-const mysql = require('mysql2');
+const db = require('./db');
 const cors = require('cors');
 const bodyParser = require("body-parser");
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const express = require('express');
+const axios = require('axios');
 const app = express();
-
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "12345",
-  database: "test-react-admin"
-});
 
 app.use(cors());
 app.use(bodyParser.urlencoded({
@@ -20,28 +13,34 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', H(async (req, res) => {
 
   const userObj = {
     login: req.body.login,
     password: req.body.password
   };
 
-  const user = await db.promise().query(`select * from users where login='${userObj.login}' limit 1`);
+  const users = await db.awaitSQL`select * from users where login=${userObj.login} limit 1`;
+  if (!users) throw Error('No user')
+  const user = users[0];
+  const guids = await getGuids([user.id], []);
+  if (!guids) throw Error('No ids')
 
-  if (_.isEmpty(user[0][0])) {
+  if (_.isEmpty(user)) {
     res.sendStatus(403);
     return;
   }
 
-  if (userObj.password === user[0][0].password) {
-    let token = generateToken(user[0][0].id, user[0][0].login);
-    res.send({token, permission: user[0][0].permission, user: user[0][0]});
-  } else {
+  if (userObj.password !== user.password) {
     res.sendStatus(403);
+    return;
   }
 
-});
+  user.guid = guids[0][0]
+
+  let token = generateToken(user.id, user.login);
+  res.send({token, permission: user.permission, user: user});
+}));
 
 app.use('/', (req, res, next) => {
 
@@ -88,28 +87,31 @@ app.use((req, res, next) => {
 // });
 
 //
-
-app.post('/customer/get_user_ids', async (req, res) => {
-  const {user_ids, target_ids} = req.body;
-  const exampleDate = {
-    "user_ids": [
-      "4lnjZOmhL8rVXDfMD1vjYFzX4KwJI4R5nYYTyX8zexFKo",
-      "VN0jaw3IeLYJ4vTxg4b3rCXAoMdwCrVyb33hoxQrQYskw",
-      "aDV01QNTbwR4MQIvYZW9Bf0rvWGZho5VDnntQ5mwmyFg6"
-    ],
-    "target_ids": [
-      "oNpKaQBIe0bpKribM4N8DS4KZLA1uRQ0GWWcrlyZzqCDr",
-      "zyBwNzZSQwBbyLu3O0bK9tvrb9plCwvykAAfOxaozdc6B",
-      "mgoAYxVfNA45prCBY8eG5UW6OjbnTyAGB99uGwW3KkhV1"
-    ]
-  };
-
-  res.send(exampleDate)
-});
+//
+// app.post('/customer/get_user_ids', async (req, res) => {
+//   const {user_ids, target_ids} = req.body;
+//
+//
+//
+//   const exampleDate = {
+//     "user_ids": [
+//       "4lnjZOmhL8rVXDfMD1vjYFzX4KwJI4R5nYYTyX8zexFKo",
+//       "VN0jaw3IeLYJ4vTxg4b3rCXAoMdwCrVyb33hoxQrQYskw",
+//       "aDV01QNTbwR4MQIvYZW9Bf0rvWGZho5VDnntQ5mwmyFg6"
+//     ],
+//     "target_ids": [
+//       "oNpKaQBIe0bpKribM4N8DS4KZLA1uRQ0GWWcrlyZzqCDr",
+//       "zyBwNzZSQwBbyLu3O0bK9tvrb9plCwvykAAfOxaozdc6B",
+//       "mgoAYxVfNA45prCBY8eG5UW6OjbnTyAGB99uGwW3KkhV1"
+//     ]
+//   };
+//
+//   res.send(exampleDate)
+// });
 
 //User Data
 
-app.get('/api/users', async (req, res) => {
+app.get('/api/users', H(async (req, res) => {
   // const parsedFilter = JSON.parse(req.query.filter);
   // if (parsedFilter.customer_user_id) {
   //   const usersById = await db.promise().query(`select * from user_data where customer_user_id='${parsedFilter.customer_user_id}'`);
@@ -117,26 +119,55 @@ app.get('/api/users', async (req, res) => {
   //   res.send(usersById[0]);
   //   return;
   // }
-  const users = await db.promise().query(`select u.id, u.name, u.login, u.imgSrc, u.location from users_friends uf join users u on uf.friendId = u.id where uf.userId=${req.user.id}`);
-  users[0] = users[0].map(u => ({...u, is_active: Boolean(u.is_active)}))
+  const friends = await db.awaitSQL`select u.id, u.name, u.login, u.img_src, u.location 
+  from users_friends uf 
+  join users u on uf.friend_id = u.id 
+  where uf.user_id=${req.user.id} and u.id <> ${req.user.id}`;
+
+  // users[0] = users[0].map(u => ({...u, is_active: Boolean(u.is_active)}))
   // await Promise.all(UsersData[0].map(async u => {
   //   const getCustomers = await db.promise().query(`select c.id, c.name from users_customers uc join customers c on uc.customerId=c.id where userId = ${u.id}`);
   //   u.customers = getCustomers[0];
   // }));
-  res.send(users[0]);
-});
+  res.send(_.map(friends, (u, i) => ({...u})));
+}));
 
-app.get('/api/users/:userId', async (req, res) => {
-  const user = await db.promise().query(`select * from users u where u.id=${req.params.userId} limit 1`);
-  res.send(user[0][0]);
-});
+app.get('/api/users/:userId', H(async (req, res) => {
+  const users = await db.awaitSQL`select * from users u where u.id=${req.params.userId} limit 1`;
+  if (!users) throw Error('No user')
+  const user = users[0]
+  const guids = await getGuids([], [user.id]);
+  if (!guids) throw Error('No ids')
+  user.guid = guids[1][0]
+  res.send(user);
+}));
+//
+// app.put('/api/users/:userId', H(async (req, res) => {
+//   const modifiedDate = new Date();
+//   const user = await db.awaitSafe(`update users u set is_active='${req.body.isActive}',
+//   modified='${modifiedDate.toISOString()}' where u.id=${req.params.userId};`);
+//   res.send(user[0]);
+// }));
 
-app.put('/api/users/:userId', async (req, res) => {
-  const modifiedDate = new Date();
-  const user = await db.promise().query(`update user_data u set is_active='${req.body.isActive}', 
-  modified=${modifiedDate} where u.id=${req.params.userId};`);
-  res.send(user[0]);
-});
+app.use((err, req, res, next) => {
+  if (err) {
+    console.log('ERR:', err)
+    return res.status(500)
+  }
+  next();
+})
+
+async function getGuids(userIds, targetIds) {
+  const access = {
+    api_key: 'apikey1234qwer',
+    api_secret: 'secret_asdf\\\'k;kcc'
+  };
+  return await axios.post('http://api-local.intimmeet.com/customer/get_user_ids', {
+    token: Buffer.from(`${access.api_key}:${access.api_secret}`).toString('base64'),
+    user_ids: _.map(userIds, Number),
+    target_ids: _.map(targetIds, Number)
+  }).then(({data}) => [data.user_ids, data.target_ids]).catch((err) => console.error('API:', err));
+}
 
 //
 
@@ -242,4 +273,15 @@ function generateToken(id, login) {
   return jwt.sign(u, 'secret', {
     expiresIn: 60 * 60 * 24
   });
+}
+
+
+function H(handler) {
+  return (req, res, next) => {
+    try {
+      Promise.resolve(handler(req, res, next)).catch(next)
+    } catch (err) {
+      next(err);
+    }
+  }
 }

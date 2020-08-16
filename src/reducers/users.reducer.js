@@ -9,21 +9,11 @@ const initialState = {
 
 const users = (state = initialState, action) => {
   switch (action.type) {
-    case GET_USERS_IDS_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        data: [..._.map(state.data, d => ({
-          ...d,
-          guId: _.get(_.find(action.payload, ['targetId', d.id]), 'guId') || null
-        }))]
-      }
-    }
     case GET_USERS_SUCCESS: {
       return {
         ...state,
         isLoading: false,
-        data: [...action.payload.data]
+        data: [...action.payload]
       }
     }
     case GET_USERS_FAILED: {
@@ -38,5 +28,3 @@ const users = (state = initialState, action) => {
   }
 }
 export default users;
-
-
