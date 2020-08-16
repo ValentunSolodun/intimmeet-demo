@@ -63,7 +63,7 @@ const UserPage = ({renderData, getUser}) => {
       <Icon className='user-icon-add-to-favourite' imgSrc='/images/icons/to_favourite.svg'/>
       <div className='user-avatar-container'>
         <div className='user-page-avatar-container'>
-          <img className='user-avatar-item' src={user.imgSrc} alt=""/>
+          <img className='user-avatar-item' src={user.img_src} alt=""/>
         </div>
         <div className='user-name-container'>
           {user.name}
@@ -102,8 +102,8 @@ const UserPage = ({renderData, getUser}) => {
         })}>
           Incomming call
         </button>
-        <button onClick={() => window.onCallEvent('pick_up', {publishVideo: true})}>Pick up (with video)</button>
-        <button onClick={() => window.onCallEvent('pick_up', {publishVideo: false})}>Pick up</button>
+        <button onClick={() => window.onCallEvent('pick_up', {subscribeVideo: true})}>Pick up (with video)</button>
+        <button onClick={() => window.onCallEvent('pick_up', {subscribeVideo: false})}>Pick up</button>
         <button onClick={() => window.onCallEvent('hang_up')}>Hang up</button>
         <button onClick={() => window.onCallEvent('state_changed', {subscribeAudio: false})}>State changed (off
           subscribeAudio)

@@ -67,7 +67,7 @@ const RootPage = ({renderData, getUsers}) => {
           _.map(users, u => {
             return (
               <div className={cn('user-item-container')} key={u.id}>
-                <ImageWithText onClick={() => handlerOnClickUser(u.id)} imgSrc={u.imgSrc} title={u.name}
+                <ImageWithText onClick={() => handlerOnClickUser(u.id)} imgSrc={u.img_src} title={u.name}
                                subtitle={u.location}/>
                 <div className='user-item-button-container'>
                   <Button className='button-hide-in-grid' label='Hide' style='gray'/>
