@@ -43,6 +43,8 @@ const CollingContainer = ({children, offsetTop = '33%', style, ...args}) => {
 const ControlButton = ({
                          isVideo,
                          isIncoming,
+                         publishAudio,
+                         publishVideo,
                          subscribeVideo,
                          subscribeAudio,
                          handlersOfCall = {},
@@ -62,19 +64,19 @@ const ControlButton = ({
           (
             <>
               {
-                subscribeVideo ?
-                  (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                publishVideo ?
+                  (<Icon onClick={() => handlersOfCall.handlerSetVideo(!publishVideo)}
                          imgSrc='/images/icons/ongoing_call__video.svg'/>)
                   :
-                  (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                  (<Icon onClick={() => handlersOfCall.handlerSetVideo(!publishVideo)}
                          imgSrc='/images/icons/blue_video_muted.svg'/>)
               }
               {
-                subscribeAudio ?
-                  (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                publishAudio ?
+                  (<Icon onClick={() => handlersOfCall.handlerSetAudio(!publishAudio)}
                          imgSrc='/images/icons/ongoing_call__mute.svg'/>)
                   :
-                  (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                  (<Icon onClick={() => handlersOfCall.handlerSetAudio(!publishAudio)}
                          imgSrc='/images/icons/blue_micro_muted_bigger.svg'/>)
               }
               <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
@@ -83,19 +85,19 @@ const ControlButton = ({
           (<>
             <Icon onClick={handlersOfCall.handlerSetVolume} imgSrc='/images/icons/ongoing_call__off_volume.svg'/>
             {
-              subscribeVideo ?
-                (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+              publishVideo ?
+                (<Icon onClick={() => handlersOfCall.handlerSetVideo(!publishVideo)}
                        imgSrc='/images/icons/ongoing_call__video.svg'/>)
                 :
-                (<Icon onClick={() => handlersOfCall.handlerSetVideo(!subscribeVideo)}
+                (<Icon onClick={() => handlersOfCall.handlerSetVideo(!publishVideo)}
                        imgSrc='/images/icons/blue_video_muted.svg'/>)
             }
             {
-              subscribeAudio ?
-                (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+              publishAudio ?
+                (<Icon onClick={() => handlersOfCall.handlerSetAudio(!publishAudio)}
                        imgSrc='/images/icons/ongoing_call__mute.svg'/>)
                 :
-                (<Icon onClick={() => handlersOfCall.handlerSetAudio(!subscribeAudio)}
+                (<Icon onClick={() => handlersOfCall.handlerSetAudio(!publishAudio)}
                        imgSrc='/images/icons/blue_micro_muted_bigger.svg'/>)
             }
             <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/ongoing_call_end_call.svg'/>
@@ -117,7 +119,7 @@ const IncomingCall = ({fullName, handlersOfCall}) => {
   )
 };
 
-const ConnectingClient = ({name, fullName, handlersOfCall, subscribeVideo, subscribeAudio}) => {
+const ConnectingClient = ({name, fullName, handlersOfCall, publishVideo, publishAudio}) => {
   return (
     <CollingContainer>
       <div className='calling-container__connection-top-icons'>
@@ -133,7 +135,7 @@ const ConnectingClient = ({name, fullName, handlersOfCall, subscribeVideo, subsc
           <b>TIP:</b> Keep the call short. Save the lengthy talk for your first date!
         </span>
       </div>
-      <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}/>
+      <ControlButton publishVideo={publishVideo} publishAudio={publishAudio} handlersOfCall={handlersOfCall}/>
       <div className='calling-container__full-name-of-client'>
         {fullName}
       </div>
@@ -141,14 +143,14 @@ const ConnectingClient = ({name, fullName, handlersOfCall, subscribeVideo, subsc
   )
 };
 
-const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall, publishAudio, subscribeVideo, subscribeAudio}) => {
+const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall, publishAudio, publishVideo, subscribeAudio}) => {
   return (
     <CollingContainer>
       <div className='calling-container__time-of-call'>
         <div>{timeOfCall}</div>
         <div>You are in a call with <br/> <b>{fullName}</b></div>
         {
-          !publishAudio ? (
+          !subscribeAudio ? (
             <div>
               <Icon imgSrc='/images/icons/blue_micro_muted.svg'/>
             </div>
@@ -163,7 +165,7 @@ const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall, publishAud
           <b>TIP:</b> Show interest by being a good listener
         </span>
       </div>
-      <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}/>
+      <ControlButton publishVideo={publishVideo} publishAudio={publishAudio} handlersOfCall={handlersOfCall}/>
     </CollingContainer>
   )
 };
@@ -220,7 +222,7 @@ const EndedCall = ({fullName, handlerOnClickProfile, name, timeOfCall, reliabili
   )
 };
 
-const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, handlersOfCall, subscribeVideo, subscribeAudio}) => {
+const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, handlersOfCall, publishVideo, publishAudio}) => {
 
   const [typeOfVideoCall, setTypeOfVideoCall] = useState(connecting ? 'regular' : '');
 
@@ -273,7 +275,7 @@ const ConnectingVideoClient = ({name, connecting, fullName, imgSrcBackground, ha
           <div>
             {fullName}
           </div>
-          <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}
+          <ControlButton publishVideo={publishVideo} publishAudio={publishAudio} handlersOfCall={handlersOfCall}
                          isVideo={true}/>
         </div>
       </div>
@@ -297,7 +299,7 @@ const ProgressBarr = ({progress, ...args}) => {
 };
 
 //TODO: Need to implement video element
-const ConnectedVideoClient = ({publishAudio, passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall, subscribeVideo, subscribeAudio}) => {
+const ConnectedVideoClient = ({publishAudio, publishVideo, passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall, subscribeAudio}) => {
   return (
     <CollingContainer offsetTop='10%' style={{paddingTop: 50}}>
       <div className='calling-container__video-container'>
@@ -309,7 +311,7 @@ const ConnectedVideoClient = ({publishAudio, passion = 20, name, timeOfCall, ful
             <div>{timeOfCall}</div>
             <div>
               {
-                !publishAudio ? (<Icon imgSrc='/images/icons/blue_micro_muted.svg'/>) : null
+                !subscribeAudio ? (<Icon imgSrc='/images/icons/blue_micro_muted.svg'/>) : null
               }
               <Icon imgSrc='/images/icons/white_dont_enter.svg'/>
               <Icon imgSrc='/images/icons/white_alert.svg'/>
@@ -328,7 +330,7 @@ const ConnectedVideoClient = ({publishAudio, passion = 20, name, timeOfCall, ful
             <br/>
             <b>{fullName}</b>
           </div>
-          <ControlButton subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio} handlersOfCall={handlersOfCall}
+          <ControlButton publishVideo={publishVideo} publishAudio={publishAudio} handlersOfCall={handlersOfCall}
                          isVideo={true}/>
         </div>
       </div>
@@ -418,10 +420,11 @@ const CallingComponent = ({
 
 
   const renderWithoutVideo = () => {
-    if (connecting) return <ConnectingClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
+    if (connecting) return <ConnectingClient publishVideo={publishVideo} publishAudio={publishAudio}
                                              handlersOfCall={handlersOfCall} fullName={fullName} name={name}/>
-    if (connected) return <ConnectedClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
-                                           publishAudio={publishAudio} handlersOfCall={handlersOfCall}
+    if (connected) return <ConnectedClient subscribeAudio={subscribeAudio}
+                                           publishAudio={publishAudio} publishVideo={publishVideo}
+                                           handlersOfCall={handlersOfCall}
                                            fullName={fullName} timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
                                      timeOfCall={timeOfCall} name={name}/>
@@ -429,12 +432,13 @@ const CallingComponent = ({
   };
 
   const renderWithVideo = () => {
-    if (connecting) return <ConnectingVideoClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
+    if (connecting) return <ConnectingVideoClient publishVideo={publishVideo} publishAudio={publishAudio}
                                                   handlersOfCall={handlersOfCall} connecting={connecting}
                                                   imgSrcBackground={imgSrc} fullName={fullName}
                                                   name={name}/>
-    if (connected) return <ConnectedVideoClient subscribeVideo={subscribeVideo} subscribeAudio={subscribeAudio}
-                                                publishAudio={publishAudio} handlersOfCall={handlersOfCall}
+    if (connected) return <ConnectedVideoClient subscribeAudio={subscribeAudio}
+                                                publishAudio={publishAudio} publishVideo={publishVideo}
+                                                handlersOfCall={handlersOfCall}
                                                 fullName={fullName}
                                                 timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedVideoCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
@@ -446,7 +450,7 @@ const CallingComponent = ({
     <>
       {
         isIncomingCall ? <IncomingCall handlersOfCall={handlersOfCall}
-                                       fullName={targetName}/> : publishVideo ? renderWithVideo() : renderWithoutVideo()
+                                       fullName={targetName}/> : subscribeVideo ? renderWithVideo() : renderWithoutVideo()
       }
     </>
   )
@@ -568,6 +572,8 @@ class IntimmeetButton extends React.Component {
         isIncomingCall: false,
         publishVideo: false,
         publishAudio: true,
+        subscribeVideo: false,
+        subscribeAudio: false,
         connecting: false,
         connected: false,
         callEnded: false
@@ -594,13 +600,13 @@ class IntimmeetButton extends React.Component {
 
     this.Call = e.native;
 
-    this.Call.on('pick_up', ({publishVideo}) => {
+    this.Call.on('pick_up', ({subscribeVideo}) => {
       let counter = 0;
       this.setState((state) => ({
         ...state,
         callState: {
           ...state.callState,
-          publishVideo,
+          subscribeVideo,
           isActive: true,
           isIncomingCall: false,
           connecting: false,
@@ -739,7 +745,7 @@ class IntimmeetButton extends React.Component {
             this.handlerOnClickPhoneIcon(e);
             this.props.callbackOnClickPhoneIcon();
           }}
-          style={{top: this.props.offsetTop || this.state.callState.publishVideo ? '1%' : '26%'}}
+          style={{top: this.props.offsetTop || this.state.callState.subscribeVideo ? '1%' : '26%'}}
           className={cn(this.props.classNamePhoneIcon, 'phone-icon-general')}
           classNameImg='phone-icon-general-img-item'
           imgSrc='/images/icons/phone_icon.svg'
