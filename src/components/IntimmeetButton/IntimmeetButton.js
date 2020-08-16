@@ -40,6 +40,18 @@ const CollingContainer = ({children, offsetTop = '33%', style, ...args}) => {
 //   )
 // };
 
+const Publisher = ({...args}) => {
+  return (
+    <div {...args} id='publisher'/>
+  )
+};
+
+const Subscriber = ({...args}) => {
+  return (
+    <div {...args} id='subscriber'>test sub</div>
+  )
+};
+
 const ControlButton = ({
                          isVideo,
                          isIncoming,
@@ -143,9 +155,9 @@ const ConnectingClient = ({name, fullName, handlersOfCall, publishVideo, publish
   )
 };
 
-const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall, publishAudio, publishVideo, subscribeAudio}) => {
+const ConnectedClient = ({name, fullName, timeOfCall, handlersOfCall, publishAudio, publishVideo, subscribeAudio, style}) => {
   return (
-    <CollingContainer>
+    <CollingContainer style={style}>
       <div className='calling-container__time-of-call'>
         <div>{timeOfCall}</div>
         <div>You are in a call with <br/> <b>{fullName}</b></div>
@@ -299,14 +311,16 @@ const ProgressBarr = ({progress, ...args}) => {
 };
 
 //TODO: Need to implement video element
-const ConnectedVideoClient = ({publishAudio, publishVideo, passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall, subscribeAudio}) => {
+const ConnectedVideoClient = ({publishAudio, subscribeVideo, publishVideo, passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall, subscribeAudio, style}) => {
   return (
-    <CollingContainer offsetTop='10%' style={{paddingTop: 50}}>
+    <CollingContainer offsetTop='10%' style={{paddingTop: 50, ...style}}>
       <div className='calling-container__video-container'>
         <div className='calling-container__passion-detector-text'>Passion Detector</div>
         <ProgressBarr style={{position: "absolute", top: 32, left: 0}} progress={50}/>
 
         <div className='calling-container__video-element'>
+          <Subscriber style={{display: subscribeVideo ? 'block' : 'none'}}/>
+          <Publisher style={{display: 'none'}}/>
           <div className='calling-container__connection-top-icons top-icons-into-video-call'>
             <div>{timeOfCall}</div>
             <div>
@@ -422,10 +436,10 @@ const CallingComponent = ({
   const renderWithoutVideo = () => {
     if (connecting) return <ConnectingClient publishVideo={publishVideo} publishAudio={publishAudio}
                                              handlersOfCall={handlersOfCall} fullName={fullName} name={name}/>
-    if (connected) return <ConnectedClient subscribeAudio={subscribeAudio}
-                                           publishAudio={publishAudio} publishVideo={publishVideo}
-                                           handlersOfCall={handlersOfCall}
-                                           fullName={fullName} timeOfCall={timeOfCall}/>
+    // if (connected) return <ConnectedClient subscribeAudio={subscribeAudio}
+    //                                        publishAudio={publishAudio} publishVideo={publishVideo}
+    //                                        handlersOfCall={handlersOfCall}
+    //                                        fullName={fullName} timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
                                      timeOfCall={timeOfCall} name={name}/>
     return null;
@@ -436,11 +450,11 @@ const CallingComponent = ({
                                                   handlersOfCall={handlersOfCall} connecting={connecting}
                                                   imgSrcBackground={imgSrc} fullName={fullName}
                                                   name={name}/>
-    if (connected) return <ConnectedVideoClient subscribeAudio={subscribeAudio}
-                                                publishAudio={publishAudio} publishVideo={publishVideo}
-                                                handlersOfCall={handlersOfCall}
-                                                fullName={fullName}
-                                                timeOfCall={timeOfCall}/>
+    // if (connected) return <ConnectedVideoClient subscribeAudio={subscribeAudio}
+    //                                             publishAudio={publishAudio} publishVideo={publishVideo}
+    //                                             handlersOfCall={handlersOfCall}
+    //                                             fullName={fullName}
+    //                                             timeOfCall={timeOfCall}/>
     if (callEnded) return <EndedVideoCall handlerOnClickProfile={handlerOnClickProfile} fullName={fullName}
                                           timeOfCall={timeOfCall} name={name}/>
     return null;
@@ -448,6 +462,18 @@ const CallingComponent = ({
 
   return (
     <>
+      <ConnectedClient style={{display: !subscribeVideo && connected ? 'block' : 'none'}}
+                       subscribeAudio={subscribeAudio}
+                       publishAudio={publishAudio} publishVideo={publishVideo}
+                       handlersOfCall={handlersOfCall}
+                       fullName={fullName} timeOfCall={timeOfCall}/>
+      <ConnectedVideoClient style={{display: subscribeVideo && connected ? 'block' : 'none'}}
+                            subscribeAudio={subscribeAudio}
+                            subscribeVideo={subscribeVideo}
+                            publishAudio={publishAudio} publishVideo={publishVideo}
+                            handlersOfCall={handlersOfCall}
+                            fullName={fullName}
+                            timeOfCall={timeOfCall}/>
       {
         isIncomingCall ? <IncomingCall handlersOfCall={handlersOfCall}
                                        fullName={targetName}/> : subscribeVideo ? renderWithVideo() : renderWithoutVideo()
@@ -657,7 +683,7 @@ class IntimmeetButton extends React.Component {
       }));
     });
 
-    this.Call.on('error', () => {
+    this.Call.on('error', ({native}) => {
       clearInterval(timerId);
       this.setState((state) => ({
         ...state,
@@ -668,7 +694,7 @@ class IntimmeetButton extends React.Component {
           connecting: false,
           connected: false,
           callEnded: this.state.callState.connected || this.state.callState.connecting,
-          error: {status: true, text: 'Error'}
+          error: {status: true, text: native}
         }
       }));
       setTimeout(() => {
