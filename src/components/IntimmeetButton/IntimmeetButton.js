@@ -583,6 +583,31 @@ class IntimmeetButton extends React.Component {
     }))
   }
 
+  setErrorToStateAndHide = (message, delayOfHide) => {
+    this.setState((state) => ({
+      ...state,
+      callState: {
+        ...state.callState,
+        error: {
+          status: true,
+          text: message
+        },
+      }
+    }));
+    delayOfHide > 0 && setTimeout(() => {
+      this.setState((state) => ({
+        ...state,
+        callState: {
+          ...state.callState,
+          error: {
+            status: false,
+            text: ''
+          },
+        }
+      }));
+    }, delayOfHide);
+  };
+
   resetCallState = () => {
     this.setState((state) => ({
       ...state,
@@ -697,6 +722,7 @@ class IntimmeetButton extends React.Component {
           native :
           'Some error happened';
       clearInterval(timerId);
+      this.setErrorToStateAndHide(message, 0);
       this.setState((state) => ({
         ...state,
         callState: {
@@ -706,18 +732,8 @@ class IntimmeetButton extends React.Component {
           connecting: false,
           connected: false,
           callEnded: this.state.callState.connected || this.state.callState.connecting,
-          error: {status: true, text: message}
         }
       }));
-      setTimeout(() => {
-        this.setState((state) => ({
-          ...state,
-          callState: {
-            ...state.callState,
-            error: {status: false, text: ''}
-          }
-        }));
-      }, 5 * 1000)
     });
   };
 
@@ -758,12 +774,14 @@ class IntimmeetButton extends React.Component {
 
   handlerOnClickMenu = (key) => {
     if (key === 'Call') {
-      IntimMeet.callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'});
+      IntimMeet.callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'})
+        .catch(e => this.setErrorToStateAndHide(e.message, 5 * 1000));
       this.setState((state) => ({...state, showMenu: false}));
     }
 
     if (key === 'Video Call') {
-      IntimMeet.callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'});
+      IntimMeet.callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'})
+        .catch(e => this.setErrorToStateAndHide(e.message, 5 * 1000));
       this.setState((state) => ({...state, showMenu: false}));
     }
     this.setState({selectedMenu: key});
