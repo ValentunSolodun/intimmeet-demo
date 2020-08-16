@@ -228,7 +228,7 @@ const EndedCall = ({fullName, handlerOnClickProfile, name, timeOfCall, reliabili
       </div>
 
       <div>
-        <Button onClick={handlerOnClickProfile} style='red' label='Profile'/>
+        <Button onClick={handlerOnClickProfile} style='red' label='Close'/>
       </div>
     </CollingContainer>
   )
@@ -396,7 +396,7 @@ const EndedVideoCall = ({name, timeOfCall, fullName, handlerOnClickProfile}) => 
       </div>
 
       <div>
-        <Button onClick={handlerOnClickProfile} style='red' label='Profile'/>
+        <Button onClick={handlerOnClickProfile} style='red' label='Close'/>
       </div>
     </CollingContainer>
   )
