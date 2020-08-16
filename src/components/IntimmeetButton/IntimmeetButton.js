@@ -668,7 +668,7 @@ class IntimmeetButton extends React.Component {
         ...state,
         callState: {
           ...state.callState,
-          isActive: true,
+          isActive: !this.state.callState.isIncomingCall,
           isIncomingCall: false,
           connecting: false,
           connected: false,
