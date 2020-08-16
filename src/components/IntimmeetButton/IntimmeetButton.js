@@ -53,9 +53,9 @@ const ControlButton = ({
         isIncoming ? (
           <>
             <Icon onClick={handlersOfCall.handlerHangUp} imgSrc='/images/icons/hung_up.svg'/>
-            <Icon onClick={() => handlersOfCall.handlerPickUp({publishVideo: false})}
+            <Icon onClick={() => handlersOfCall.handlerPickUp({publishVideo: false, publishAudio: true})}
                   imgSrc='/images/icons/pick_up.svg'/>
-            <Icon onClick={() => handlersOfCall.handlerPickUp({publishVideo: true})}
+            <Icon onClick={() => handlersOfCall.handlerPickUp({publishVideo: true, publishAudio: true})}
                   imgSrc='/images/icons/ongoing_call__video.svg'/>
           </>
         ) : isVideo ?
@@ -583,7 +583,7 @@ class IntimmeetButton extends React.Component {
       ...state,
       callState: {
         ...state.callState,
-        targetName: targetData.name,
+        targetName: '---',
         isActive: true,
         publishVideo,
         publishAudio: true,

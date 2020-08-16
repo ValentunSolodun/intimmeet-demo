@@ -30,9 +30,21 @@ export default class Call extends EventTarget {
     }
     if (!currentCall) return
     if (event === 'pick_up') {
+      this._publisher = document.querySelector('#publisher');
+      this._subscriber = document.querySelector('#subscriber');
+      if (!this._publisher || this._subscriber) {
+        currentCall._emit('error', 'NO publisher NOR this._subscriber')
+        return;
+      }
       setTimeout(() => {
         console.log(currentCall.id, 'Emit pick_up');
         currentCall._emit('pick_up', data)
+        currentCall._checker = setInterval(() => {
+          if (document.querySelector('#publisher') !== this._publisher ||
+            document.querySelector('#subscriber') !== this._subscriber) {
+            currentCall._emit('error', 'NO publisher NOR this._subscriber')
+          }
+        }, 1000)
       }, 100)
     }
     if (event === 'state_changed') {
@@ -42,6 +54,7 @@ export default class Call extends EventTarget {
       }, 100)
     }
     if (event === 'hang_up') {
+      clearInterval(currentCall._checker);
       console.log(currentCall.id, 'Emit hang_up');
       currentCall._emit('hang_up')
       currentCall = null

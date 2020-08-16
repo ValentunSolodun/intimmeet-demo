@@ -157,16 +157,23 @@ app.use((err, req, res, next) => {
   next();
 })
 
+// async function getGuids(userIds, targetIds) {
+//   const access = {
+//     api_key: 'apikey1234qwer',
+//     api_secret: 'secret_asdf\\\'k;kcc'
+//   };
+//   return await axios.post('http://api-local.intimmeet.com/customer/get_user_ids', {
+//     token: Buffer.from(`${access.api_key}:${access.api_secret}`).toString('base64'),
+//     user_ids: _.map(userIds, Number),
+//     target_ids: _.map(targetIds, Number)
+//   }).then(({data}) => [data.user_ids, data.target_ids]).catch((err) => console.error('API:', err));
+// }
+
 async function getGuids(userIds, targetIds) {
-  const access = {
-    api_key: 'apikey1234qwer',
-    api_secret: 'secret_asdf\\\'k;kcc'
-  };
-  return await axios.post('http://api-local.intimmeet.com/customer/get_user_ids', {
-    token: Buffer.from(`${access.api_key}:${access.api_secret}`).toString('base64'),
-    user_ids: _.map(userIds, Number),
-    target_ids: _.map(targetIds, Number)
-  }).then(({data}) => [data.user_ids, data.target_ids]).catch((err) => console.error('API:', err));
+  return [
+    _.map(userIds, (id) => 'uuu' + id),
+    _.map(targetIds, (id) => 'ttt' + id),
+  ]
 }
 
 //
