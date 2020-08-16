@@ -32,7 +32,7 @@ export default class Call extends EventTarget {
     if (event === 'pick_up') {
       this._publisher = document.querySelector('#publisher');
       this._subscriber = document.querySelector('#subscriber');
-      if (!this._publisher || this._subscriber) {
+      if (!this._publisher || !this._subscriber) {
         currentCall._emit('error', 'NO publisher NOR this._subscriber')
         return;
       }
