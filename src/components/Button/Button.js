@@ -5,7 +5,9 @@ import cn from 'classnames';
 const STYLE_OF_BUTTONS = {
   'gray': 'gray-button',
   'green': 'green-button',
-  'red': 'red-button'
+  'red': 'red-button',
+  'blue': 'blue-button',
+  'white': 'white-button'
 };
 
 const Button = ({onClick, style, className, classNameButton, label, leftIcon}) => {
