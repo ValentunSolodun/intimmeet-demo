@@ -353,3 +353,115 @@
     background: #4750AE;
 }
 
+
+/*Manu tab container*/
+
+.menu-tab-container {
+    border-top: 1px solid #707070;
+    padding: 11px 0;
+    margin-top: 18px;
+}
+
+.menu-tab-container__title {
+    color: #511673;
+    font-size: 13px;
+}
+
+.menu-tab-container__children-wrapper {
+    padding-top: 11px;
+}
+
+/**/
+
+/*Approvals*/
+
+.approvals-container__tab-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.approvals-container__tab-button {
+    flex: 1;
+    padding: 3px 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.approvals-container__tab-button button {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.approvals-container__tab-button:first-child {
+    margin-right: 15px;
+}
+
+.approvals-container__tab-button:last-child {
+    margin-left: 15px;
+}
+
+.approvals-container__body {
+    padding-top: 9px;
+}
+
+.my-approved-container__user-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.my-approved-container__user-item__avatar {
+    width: 53px;
+}
+
+.my-approved-container__user-item__avatar img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.my-approved-container__user-item__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 10px;
+    color: #707070;
+    padding: 0 5px;
+}
+
+.my-approved-container__user-item__info > div {
+    margin: 3px 0;
+}
+
+.my-approved-container__user-item__control-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100px;
+}
+
+.my-approved-container__user-item__control-buttons.approved-my .icon-container {
+    height: 25px;
+    width: 25px;
+}
+
+.my-approved-container__user-item__control-buttons .icon-container:nth-child(1) {
+    height: 22px;
+    width: 22px;
+}
+
+.my-approved-container__user-item__control-buttons .icon-container {
+    height: 33px;
+    width: 33px;
+    margin: 0 5px;
+}
+
+.my-approved-container__user-item__info__full-name {
+    display: flex;
+    align-items: center;
+}
+
+.approvals-list-container {
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
+/**/

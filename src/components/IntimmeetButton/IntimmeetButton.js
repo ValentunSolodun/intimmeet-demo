@@ -4,6 +4,7 @@ import Icon from '../Icon';
 import {IntimMeet} from '../../fake';
 // import {IntimMeet} from 'client-lib';
 import Dropdown from '../Dropdown';
+import {connect} from 'react-redux';
 import cn from 'classnames';
 import moment from 'moment';
 import _ from 'lodash';
@@ -921,9 +922,9 @@ class IntimmeetButton extends React.Component {
                 <div>
                   {
                     this.state.selectedMenu === 'Approvals' ? (
-                      <div>APPROVALS</div>
+                      <Approvals/>
                     ) : this.state.selectedMenu === 'Call Log' ? (
-                      <div>CALL LOG</div>
+                      <CallLog/>
                     ) : this.state.selectedMenu === 'Speed Date' ? (
                       <div>SPEED DATE</div>
                     ) : this.state.selectedMenu === 'Images' ? (
@@ -942,5 +943,138 @@ class IntimmeetButton extends React.Component {
     )
   }
 }
+
+const MenuTabContainer = ({children, title}) => {
+  return (
+    <div className='menu-tab-container'>
+      <span className='menu-tab-container__title'>{title}</span>
+      <div className='menu-tab-container__children-wrapper'>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+const USER_TEST_DATA = [
+  {id: 1, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 2, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 3, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 4, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 5, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 6, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 7, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 8, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 9, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 10, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 11, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 12, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+  {id: 13, name: 'Denise', location: 'New York, NY', imgSrc: 'images/test_user.png'},
+];
+
+
+const UserListItem = ({isCallLog = false, isApprovedMy = false, imgSrc, isMissedCall = false, fullName, matched}) => {
+  return (
+    <div className='my-approved-container__user-item'>
+      <div className='my-approved-container__user-item__avatar'>
+        <img src={imgSrc} alt=""/>
+      </div>
+      <div className='my-approved-container__user-item__info'>
+        <div className='my-approved-container__user-item__info__full-name'>
+          {
+            isCallLog ? <div style={{marginRight: 5}}><Icon
+              imgSrc={`/images/icons/${isMissedCall ? 'green_arrow' : 'red_arrow'}.svg`}/></div> : null
+          }
+          {fullName}
+        </div>
+        <div>Matched: {matched}</div>
+      </div>
+      <div className={cn('my-approved-container__user-item__control-buttons', {'approved-my': isApprovedMy})}>
+        {
+          !isCallLog ? (
+            <>
+              <Icon style={{display: !isApprovedMy ? 'none' : 'flex'}} imgSrc='/images/icons/profile.svg'/>
+              <Icon imgSrc='/images/icons/phone_icon.svg'/>
+            </>
+          ) : null
+        }
+        <Icon imgSrc='/images/icons/speed_date_color.svg'/>
+      </div>
+    </div>
+  )
+};
+
+const ApprovalsComponent = () => {
+  const [selectedTab, setSelectedTab] = useState('My Approved');
+
+  return (
+    <MenuTabContainer title='Approvals'>
+      <div className='approvals-container'>
+        <div className='approvals-container__tab-buttons'>
+          <Button style={selectedTab === 'My Approved' ? 'blue' : 'white'}
+                  label='My Approved'
+                  onClick={() => setSelectedTab('My Approved')}
+                  className={cn('approvals-container__tab-button')}/>
+          <Button style={selectedTab === 'Approved My' ? 'blue' : 'white'}
+                  label='Approved My'
+                  onClick={() => setSelectedTab('Approved My')}
+                  className={cn('approvals-container__tab-button', {'approvals-container__tab-button_button-active': selectedTab === 'Approved My'})}/>
+        </div>
+        <div className='approvals-container__body'>
+          <div className='approvals-list-container'>
+            {
+              selectedTab === 'My Approved' ?
+                (
+                  <>
+                    {
+                      _.map(USER_TEST_DATA, u => {
+                        return (
+                          <UserListItem fullName={u.name} imgSrc={u.imgSrc} matched={'10/10/10'}/>
+                        )
+                      })
+                    }
+                  </>
+                ) : (
+                  <>
+                    {
+                      _.map(USER_TEST_DATA, u => {
+                        return (
+                          <UserListItem isApprovedMy={true} fullName={u.name} imgSrc={u.imgSrc}
+                                        matched={'10/10/10'}/>
+                        )
+                      })
+                    }
+                  </>
+                )
+            }
+          </div>
+        </div>
+      </div>
+    </MenuTabContainer>
+  )
+};
+
+const Approvals = connect()(ApprovalsComponent)
+
+const CallLogComponent = () => {
+  return (
+    <MenuTabContainer title='Call log'>
+      <div className='approvals-container'>
+        <div className='approvals-container__body'>
+          <div className='approvals-list-container'>
+            {
+              _.map(USER_TEST_DATA, u => {
+                return (
+                  <UserListItem isCallLog={true} fullName={u.name} imgSrc={u.imgSrc} matched={'10/10/10'}/>
+                )
+              })
+            }
+          </div>
+        </div>
+      </div>
+    </MenuTabContainer>
+  )
+};
+
+const CallLog = connect()(CallLogComponent)
 
 export default IntimmeetButton;
