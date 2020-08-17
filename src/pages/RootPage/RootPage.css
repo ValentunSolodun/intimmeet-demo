@@ -52,6 +52,10 @@
     width: 44%;
 }
 
+.user-item-container .image-with-text-img {
+    border-radius: 15px;
+}
+
 .user-item-button-container {
     display: flex;
     justify-content: space-between;

@@ -7,6 +7,7 @@ import {getUserSelector} from '../../selectors';
 import {customHistory} from '../../helpers/history';
 import {GET_USER_REQUEST} from '../../actions';
 import Loading from '../../components/Loading';
+import Range from '../../components/Range';
 import IntemmeetButton from '../../components/IntimmeetButton';
 
 // const MENU_ITEM = [
@@ -52,7 +53,8 @@ const UserPage = ({renderData, getUser}) => {
   return (
     <div className='user-page-container'>
       {
-        isLoading ? <Loading/> : null
+        isLoading ? <Loading
+          style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}/> : null
       }
       <IntemmeetButton classNameOverlayDropdown='user-page-container__dropdown-overlay' user={user}/>
       <Icon className='user-icon-add-to-favourite' imgSrc='/images/icons/to_favourite.svg'/>

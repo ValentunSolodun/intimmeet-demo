@@ -1,4 +1,4 @@
-import {GET_USERS_SUCCESS, GET_USERS_FAILED, GET_USERS_IDS_SUCCESS} from '../actions';
+import {GET_USERS_SUCCESS, GET_USERS_FAILED} from '../actions';
 import _ from 'lodash';
 
 const initialState = {
