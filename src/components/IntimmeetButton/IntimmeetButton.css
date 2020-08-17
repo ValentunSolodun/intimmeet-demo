@@ -13,6 +13,14 @@
     color: #fff;
 }
 
+.calling-container__range-volume {
+    position: absolute;
+    width: 100px;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .common-control-button-style {
     height: 28px;
     width: 28px;
