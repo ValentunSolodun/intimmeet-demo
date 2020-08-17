@@ -1,9 +1,9 @@
 import React from 'react';
 import './Loading.css';
 
-const Loading = () => {
+const Loading = ({...args}) => {
   return (
-    <div className='lds-ring-container'>
+    <div {...args} className='lds-ring-container'>
       <div className="lds-ring">
         <div></div>
         <div></div>
