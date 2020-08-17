@@ -5,7 +5,7 @@
 
 .image-with-text-title-containers {
     position: absolute;
-    bottom: 10px;
+    bottom: 15px;
     left: 20px;
 }
 
@@ -16,7 +16,8 @@
 }
 
 .image-with-text-title {
-    font-size: 17px;
+    font-size: 15px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
