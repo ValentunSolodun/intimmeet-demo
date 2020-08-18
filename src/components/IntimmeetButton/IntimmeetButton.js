@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './IntimmeetButton.css';
 import Icon from '../Icon';
 import {IntimMeet} from '../../fake';
@@ -11,6 +11,9 @@ import _ from 'lodash';
 import Button from '../Button';
 import Range from '../Range';
 import {customHistory} from '../../helpers/history';
+import {GET_CALL_LOG_REQUEST, GET_USER_APPROVALS_REQUEST} from '../../actions';
+import {getApprovalsSelector, getCallLogSelector} from '../../selectors';
+import Loading from '../Loading';
 
 const MENU_ITEM = [
   {id: 1, name: 'Approvals', icon: '/images/icons/approvals.svg'},
@@ -30,7 +33,7 @@ const MENU_ITEM_WITH_USER = [
   {id: 6, name: 'Settings', icon: '/images/icons/settings.svg'},
 ];
 
-const CollingContainer = ({children, offsetTop = '33%', style, ...args}) => {
+const CollingContainer = ({children, offsetTop = '80%', style, ...args}) => {
   return (
     <div {...args} style={{top: offsetTop, ...style}} className='calling-container'>
       {children}
@@ -257,7 +260,7 @@ const ConnectingVideoClient = ({name, volume, connecting, fullName, imgSrcBackgr
   const [typeOfVideoCall, setTypeOfVideoCall] = useState(connecting ? 'regular' : '');
 
   return (
-    <CollingContainer offsetTop='10%'>
+    <CollingContainer offsetTop='20%'>
       <div className='calling-container__video-container'>
         <div style={{backgroundImage: `url("${imgSrcBackground}")`}}
              className='calling-container__background-placeholder'>
@@ -332,7 +335,7 @@ const ProgressBarr = ({progress, ...args}) => {
 //TODO: Need to implement video element
 const ConnectedVideoClient = ({publishAudio, volume, subscribeVideo, publishVideo, passion = 20, name, timeOfCall, fullName, imgSrcBackground, handlersOfCall, subscribeAudio, style}) => {
   return (
-    <CollingContainer offsetTop='10%' style={{paddingTop: 50, ...style}}>
+    <CollingContainer offsetTop='20%' style={{paddingTop: 50, ...style}}>
       <div className='calling-container__video-container'>
         <div className='calling-container__passion-detector-text'>Passion Detector</div>
         <ProgressBarr style={{position: "absolute", top: 32, left: 0}} progress={50}/>
@@ -374,7 +377,7 @@ const ConnectedVideoClient = ({publishAudio, volume, subscribeVideo, publishVide
 
 const EndedVideoCall = ({name, timeOfCall, fullName, handlerOnClickProfile}) => {
   return (
-    <CollingContainer offsetTop='10%'>
+    <CollingContainer offsetTop='20%'>
       <div className='calling-container__video-container call-ended'>
         {/*<div className='calling-container__passion-detector-text'>Passion Detector</div>*/}
         {/*<ProgressBarr style={{position: "absolute", top: 32, left: 0}} progress={50}/>*/}
@@ -833,7 +836,7 @@ class IntimmeetButton extends React.Component {
             this.handlerOnClickPhoneIcon(e);
             this.props.callbackOnClickPhoneIcon();
           }}
-          style={{top: this.props.offsetTop || this.state.callState.subscribeVideo ? '1%' : '26%'}}
+          style={{top: this.props.offsetTop || this.state.callState.subscribeVideo ? '1%' : 'inherit'}}
           className={cn(this.props.classNamePhoneIcon, 'phone-icon-general')}
           classNameImg='phone-icon-general-img-item'
           imgSrc='/images/icons/phone_icon.svg'
@@ -1013,12 +1016,19 @@ const UserListItem = ({isCallLog = false, isApprovedMy = false, imgSrc, isMissed
   )
 };
 
-const ApprovalsComponent = () => {
+const ApprovalsComponent = ({renderData, getApprovals}) => {
+  const {approvals: {myApproved, approvedMy}, isLoading, errors} = renderData;
   const [selectedTab, setSelectedTab] = useState('My Approved');
-
+  useEffect(() => {
+    getApprovals();
+  }, []);
   return (
     <MenuTabContainer title='Approvals'>
       <div className='approvals-container'>
+        {
+          isLoading ? <Loading
+            style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}/> : null
+        }
         <div className='approvals-container__tab-buttons'>
           <Button style={selectedTab === 'My Approved' ? 'blue' : 'white'}
                   label='My Approved'
@@ -1036,9 +1046,9 @@ const ApprovalsComponent = () => {
                 (
                   <>
                     {
-                      _.map(USER_TEST_DATA, u => {
+                      _.map(myApproved, u => {
                         return (
-                          <UserListItem fullName={u.name} imgSrc={u.imgSrc} matched={'10/10/10'}/>
+                          <UserListItem fullName={u.name} imgSrc={u.img_src} matched={'10/10/10'}/>
                         )
                       })
                     }
@@ -1046,9 +1056,9 @@ const ApprovalsComponent = () => {
                 ) : (
                   <>
                     {
-                      _.map(USER_TEST_DATA, u => {
+                      _.map(approvedMy, u => {
                         return (
-                          <UserListItem isApprovedMy={true} fullName={u.name} imgSrc={u.imgSrc}
+                          <UserListItem isApprovedMy={true} fullName={u.name} imgSrc={u.img_src}
                                         matched={'10/10/10'}/>
                         )
                       })
@@ -1063,18 +1073,31 @@ const ApprovalsComponent = () => {
   )
 };
 
-const Approvals = connect()(ApprovalsComponent)
+const Approvals = connect(state => ({
+  renderData: getApprovalsSelector(state)
+}), dispatch => ({
+  getApprovals: () => dispatch({type: GET_USER_APPROVALS_REQUEST})
+}))(ApprovalsComponent)
 
-const CallLogComponent = () => {
+const CallLogComponent = ({getCallLog, renderData}) => {
+  const {callLog, isLoading, errors} = renderData;
+  useEffect(() => {
+    getCallLog();
+  }, []);
   return (
     <MenuTabContainer title='Call log'>
       <div className='approvals-container'>
+        {
+          isLoading ? <Loading
+            style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}/> : null
+        }
         <div className='approvals-container__body'>
           <div className='approvals-list-container'>
             {
-              _.map(USER_TEST_DATA, u => {
+              _.map(callLog, u => {
                 return (
-                  <UserListItem isCallLog={true} fullName={u.name} imgSrc={u.imgSrc} matched={'10/10/10'}/>
+                  <UserListItem isMissedCall={callLog.status === 'Missed Call'} isCallLog={true} fullName={u.name}
+                                imgSrc={u.img_src} matched={'10/10/10'}/>
                 )
               })
             }
@@ -1085,6 +1108,10 @@ const CallLogComponent = () => {
   )
 };
 
-const CallLog = connect()(CallLogComponent)
+const CallLog = connect(state => ({
+  renderData: getCallLogSelector(state)
+}), dispatch => ({
+  getCallLog: () => dispatch({type: GET_CALL_LOG_REQUEST})
+}))(CallLogComponent)
 
 export default IntimmeetButton;
