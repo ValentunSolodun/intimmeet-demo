@@ -13,3 +13,11 @@ export const getUsers = async () => {
 export const getUser = async (userId) => {
   return await axiosG.get(`api/users/${userId}`);
 };
+
+export const getApprovals = async () => {
+  return await axiosG.get(`api/user-approvals`);
+};
+
+export const getCallLog = async () => {
+  return await axiosG.get(`api/call-log`);
+};
