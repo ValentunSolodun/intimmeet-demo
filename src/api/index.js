@@ -13,7 +13,3 @@ export const getUsers = async () => {
 export const getUser = async (userId) => {
   return await axiosG.get(`api/users/${userId}`);
 };
-
-export const getUserIds = async ({userIds, targetIds}) => {
-  return await axiosG.post(`customer/get_user_ids`, {user_ids: [...userIds], target_ids: [...targetIds]})
-};
