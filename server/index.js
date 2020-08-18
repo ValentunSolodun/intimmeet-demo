@@ -209,10 +209,12 @@ async function getGuids(userIds, targetIds) {
 
 // User Approvals
 
-// app.get('/api/user-approvals', async (req, res) => {
-//   const approvals = await db.promise().query('select * from user_approvals');
-//   res.send(approvals[0]);
-// });
+app.get('/api/user-approvals', async (req, res) => {
+  let {user} = req;
+  const approvals = await db.awaitSQL`select * from user_approvals ua 
+  join users u on ua.approved_user_id=u.id where ua.approving_user_id=${user.id} or ua.approved_user_id=${user.id}`;
+  res.send(approvals);
+});
 
 //
 
@@ -227,11 +229,12 @@ async function getGuids(userIds, targetIds) {
 
 // Call log
 
-// app.get('/api/call-log', async (req, res) => {
-//   const callLogs = await db.promise().query('select * from call_log');
-//   callLogs[0] = callLogs[0].map(u => ({...u, video: Boolean(u.video)}))
-//   res.send(callLogs[0]);
-// });
+app.get('/api/call-log', async (req, res) => {
+  let {user} = req;
+  let callLogs = await db.awaitSQL`select * from call_log cl join users u on cl.callee=u.id where cl.caller=${user.id}`;
+  callLogs = callLogs.map(u => ({...u, video: Boolean(u.video)}))
+  res.send(callLogs);
+});
 
 //
 
