@@ -10,6 +10,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import Button from '../Button';
 import Range from '../Range';
+import {customHistory} from '../../helpers/history';
 
 const MENU_ITEM = [
   {id: 1, name: 'Approvals', icon: '/images/icons/approvals.svg'},
@@ -604,6 +605,7 @@ class IntimmeetButton extends React.Component {
   }
 
   setErrorToStateAndHide = (message, delayOfHide) => {
+    console.log('Error', message)
     this.setState((state) => ({
       ...state,
       callState: {
@@ -614,7 +616,9 @@ class IntimmeetButton extends React.Component {
         },
       }
     }));
-    delayOfHide > 0 && setTimeout(() => {
+    if (!(delayOfHide > 0)) return;
+    clearTimeout(this.errorTimeout);
+    this.errorTimeout = setTimeout(() => {
       this.setState((state) => ({
         ...state,
         callState: {
@@ -661,7 +665,7 @@ class IntimmeetButton extends React.Component {
       ...state,
       callState: {
         ...state.callState,
-        targetName: '---',
+        targetName: targetData || '',
         isActive: true,
         publishVideo,
         publishAudio: true,
@@ -802,13 +806,13 @@ class IntimmeetButton extends React.Component {
 
   handlerOnClickMenu = (key) => {
     if (key === 'Call') {
-      IntimMeet.callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: 'User Name 1'})
+      IntimMeet.callRequest(this.props.user.guid, {publishVideo: false, publishAudio: true, targetData: _.get(this.props, 'user.name')})
         .catch(e => this.setErrorToStateAndHide(e.message, 5 * 1000));
       this.setState((state) => ({...state, showMenu: false}));
     }
 
     if (key === 'Video Call') {
-      IntimMeet.callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: 'User Name 1'})
+      IntimMeet.callRequest(this.props.user.guid, {publishVideo: true, publishAudio: true, targetData: _.get(this.props, 'user.name')})
         .catch(e => this.setErrorToStateAndHide(e.message, 5 * 1000));
       this.setState((state) => ({...state, showMenu: false}));
     }
@@ -932,7 +936,13 @@ class IntimmeetButton extends React.Component {
                     ) : this.state.selectedMenu === 'Credit Manager' ? (
                       <div>CREDIT MANAGER</div>
                     ) : this.state.selectedMenu === 'Settings' ? (
-                      <div>SETTINGS</div>
+                      <div>
+                        <div>SETTINGS</div>
+                        <div onClick={() => {
+                          localStorage.clear();
+                          customHistory.push('/login')
+                        }}>LOGOUT</div>
+                      </div>
                     ) : null
                   }
                 </div>

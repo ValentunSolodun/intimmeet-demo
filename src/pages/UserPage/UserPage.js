@@ -43,7 +43,7 @@ const UserPage = ({renderData, getUser}) => {
   }, []);
 
   const handlerGoBack = () => {
-    customHistory.goBack();
+    customHistory.push('/');
   };
 
   // const handlerOnClickPhoneIcon = () => {
