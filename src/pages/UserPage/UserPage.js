@@ -56,9 +56,9 @@ const UserPage = ({renderData, getUser}) => {
         isLoading ? <Loading
           style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}/> : null
       }
-      <IntemmeetButton classNameOverlayDropdown='user-page-container__dropdown-overlay' user={user}/>
-      <Icon className='user-icon-add-to-favourite' imgSrc='/images/icons/to_favourite.svg'/>
       <div className='user-avatar-container'>
+        <IntemmeetButton classNameOverlayDropdown='user-page-container__dropdown-overlay' user={user}/>
+        <Icon className='user-icon-add-to-favourite' imgSrc='/images/icons/to_favourite.svg'/>
         <div className='user-page-avatar-container'>
           <img className='user-avatar-item' src={user.img_src} alt=""/>
         </div>

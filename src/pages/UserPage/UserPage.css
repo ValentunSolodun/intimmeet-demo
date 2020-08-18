@@ -4,7 +4,8 @@
 }
 
 .user-page-container .phone-icon-general {
-    top: 26%;
+    top: inherit;
+    bottom: 80px;
     right: 30px;
     height: 60px;
     width: 60px;
@@ -96,7 +97,7 @@
 }
 
 .user-icon-add-to-favourite {
-    top: 26%;
+    bottom: 80px;
     position: absolute;
     height: 60px;
     width: 60px;
